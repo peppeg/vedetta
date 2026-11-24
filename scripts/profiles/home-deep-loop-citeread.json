@@ -1,0 +1,15 @@
+{
+  "_comment": "As home-deep-loop-revp, with the instruction that an unopened result is not a source (SPEC_LINK_CONTROLLATI 3.1). Run with bench.py --mode deep.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP": "true",
+    "LLM_EFFORT_DEEP": "medium",
+    "VEDETTA_DEEP_LOOP_REVIEW": "true",
+    "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_P": "0.95",
+    "VEDETTA_DEEP_LOOP_TOP_K": "20",
+    "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true",
+    "VEDETTA_DEEP_LOOP_COMPASS": "false",
+    "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true",
+    "VEDETTA_DEEP_LOOP_CITE_READ": "true"
+  }
+}

@@ -1,0 +1,961 @@
+{
+  "version": 3,
+  "description": "Vedetta quality benchmark (F7.2, extended to 17 multi-domain, multi-language cases in V25-T1.4, 19 with the two ruler cases of V25-QB; suite core17 = the cases before QB). Deterministic checks complement the faithfulness judge (scripts/judge.py). Run with: make eval SESSION=<id> | python3 scripts/eval.py --case <id> | --all [--suite reduced]",
+  "cases": [
+    {
+      "id": "valencia-family-4d",
+      "query": "Vorrei trascorrere con la mia famiglia, due adulti e una bambina di 9 anni, 4 giorni a Valencia in Spagna. Sapresti dirmi i posti che proprio non possiamo non visitare e magari una o due chicche?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "subqueries_contain",
+          "value": "valencia",
+          "case_insensitive": true
+        },
+        {
+          "type": "facts_exclude_keywords",
+          "values": [
+            "malesia",
+            "maiorca",
+            "mallorca"
+          ]
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "min_citations",
+          "value": 1
+        },
+        {
+          "type": "provenance_in",
+          "values": [
+            "grounded",
+            "researched",
+            "partial"
+          ]
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "id": "weather-3d",
+      "query": "Che tempo fara' nei prossimi 3 giorni a Valencia?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "id": "speranza-philosophy-clinical",
+      "query": "Il concetto di speranza dall'antichita filosofica (Spinoza, Bloch) alla psicologia positiva (Snyder), individuando i punti di contatto tra le discipline.",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "pubmed.ncbi.nlm.nih.gov",
+            "plato.stanford.edu",
+            "springer.com",
+            "psycnet.apa.org",
+            "europepmc.org",
+            "doi.org",
+            "academic.oup.com",
+            "mdpi.com"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "diverg",
+            "convergen",
+            "contrasto",
+            "tensione",
+            "al contrario",
+            "mentre"
+          ]
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "id": "agrivoltaico-normativo",
+      "known": "agrivoltaico",
+      "query": "Qual e' la normativa italiana vigente sull'agrivoltaico? Riferimenti a D.Lgs 199/2021 e Linee Guida MASE.",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "min_citations",
+          "value": 1
+        },
+        {
+          "type": "provenance_in",
+          "values": [
+            "grounded",
+            "researched",
+            "partial"
+          ]
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "mase.gov.it",
+            "gse.it",
+            "normattiva.it",
+            "gazzettaufficiale.it"
+          ]
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        }
+      ]
+    },
+    {
+      "id": "software-howto-en",
+      "known": "sqlite-wal",
+      "query": "How do I enable WAL mode in SQLite and what are its trade-offs?",
+      "mode": "standard",
+      "answer_language": "en",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "subqueries_contain",
+          "value": "sqlite"
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "write-ahead",
+            "journal_mode"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "history-fact-it",
+      "known": "suez",
+      "query": "Quando e come è stato costruito il Canale di Suez, e quanti operai vi lavorarono?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "subqueries_contain",
+          "value": "suez"
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "1859"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "1869"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "medical-evidence-en",
+      "known": "melatonina",
+      "query": "Is melatonin effective for jet lag? What does the evidence say?",
+      "mode": "standard",
+      "answer_language": "en",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "pubmed.ncbi.nlm.nih.gov",
+            "ncbi.nlm.nih.gov",
+            "cochranelibrary.com",
+            "nih.gov",
+            "europepmc.org",
+            "doi.org",
+            "bmj.com",
+            "nhs.uk",
+            "mayoclinic.org"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "trial",
+            "meta-analysis",
+            "review",
+            "study",
+            "studies"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consumer-compare-it",
+      "query": "Meglio una pompa di calore aria-acqua o una caldaia a condensazione per una casa di 100 m² al nord Italia?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "pompa di calore"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "caldaia"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "recent-event-it",
+      "query": "Quali sono le ultime novità sul prezzo dell'elettricità in Italia questo mese?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 2
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "PUN",
+            "kWh",
+            "MWh",
+            "ARERA"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "recent-release-en",
+      "known": "postgres",
+      "query": "What is the latest stable release of PostgreSQL and what changed?",
+      "mode": "standard",
+      "answer_language": "en",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "subqueries_contain",
+          "value": "postgres"
+        },
+        {
+          "type": "min_facts",
+          "value": 2
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "postgresql.org"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conflicting-numbers-it",
+      "known": "milano-abitanti",
+      "query": "Quanti abitanti ha l'area metropolitana di Milano?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 2
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "città metropolitana",
+            "area metropolitana",
+            "comune"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unanswerable-fictional",
+      "known": "zorbatek",
+      "query": "Cosa prevede la normativa sul brevetto Zorbatek del 2019?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "answer_declares_not_found"
+        }
+      ]
+    },
+    {
+      "id": "unanswerable-private",
+      "query": "What is the home address and personal phone number of the CEO of Quorvex Tooling Ltd?",
+      "mode": "standard",
+      "answer_language": "en",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "answer_declares_not_found"
+        }
+      ]
+    },
+    {
+      "id": "local-practical-de",
+      "query": "Wie melde ich in Berlin meinen Wohnsitz an und welche Unterlagen brauche ich?",
+      "mode": "standard",
+      "answer_language": "de",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "berlin.de"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "Wohnungsgeberbestätigung",
+            "Bürgeramt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "economics-concept-fr",
+      "query": "Qu'est-ce que la trappe à liquidité et quels exemples historiques existent ?",
+      "mode": "standard",
+      "answer_language": "fr",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "Keynes"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "Japon",
+            "1930",
+            "Grande Dépression",
+            "2008"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multi-question-it",
+      "known": "superbonus",
+      "query": "Cos'è il superbonus, chi può ancora usarlo nel 2026 e quali sono le alternative?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "agenziaentrate.gov.it",
+            "mef.gov.it",
+            "gazzettaufficiale.it",
+            "normattiva.it",
+            "enea.it"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eiffel-facts-it",
+      "known": "eiffel",
+      "query": "Qual è l'altezza ufficiale attuale della Torre Eiffel (comprensiva dell'antenna installata nel 2022), in quale anno esatto è stata completata l'opera e chi erano i due ingegneri capo che ne hanno progettato la struttura insieme a Gustave Eiffel?",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "330"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "1889"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "Koechlin"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "Nouguier"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "niri-shells-it",
+      "query": "Vorrei installare Fedora 44 sul mio pc. E ci volevo abbinare Niri e DankMaterialShell. Ma poi ho visto un video su Caelestia Shell e volevo capire cosa guadagnerei rispetto a DMS e se mi conviene provarlo oppure no. potresti trovarmi anche delle risorse grafiche, dei \"temi\", delle configurazioni, dei pro tips per entrambe le shell? Così riesco a farmi un'idea anche io. Non sono completamente nuovo al mondo linux e non mi preoccupa il terminale, ma non vorrei perdere tempo a provare delle cose che poi non sono nei miei gusti. grazie",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "subqueries_contain",
+          "value": "niri",
+          "case_insensitive": true
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "Hyprland"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "selfhost-sync-it",
+      "query": "Syncthing, Nextcloud o Seafile per sincronizzare i file di casa tra PC e telefoni? Requisiti del server, cifratura, app per Android/iOS e licenza.",
+      "mode": "standard",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        },
+        {
+          "type": "uncited_paragraph_ratio_max",
+          "value": 0.3
+        },
+        {
+          "type": "min_facts",
+          "value": 3
+        },
+        {
+          "type": "domains_include_any",
+          "values": [
+            "syncthing.net",
+            "nextcloud.com",
+            "seafile.com"
+          ]
+        },
+        {
+          "type": "answer_contains_any",
+          "values": [
+            "MPL",
+            "AGPL",
+            "GPL"
+          ]
+        }
+      ]
+    }
+  ],
+  "_extra_cases": "Cases outside the normal round: they run only when a suite names them (Piano dopo audit 5.4). Their question is read from docs/domande_risposta_nota.json (local, never versioned: real questions of the user), by the known entry. The conv-* cases are conversations (Piano dopo audit 5.3): their turns are written here and go one after another in the same session; each follow-up makes sense whatever the answer before said.",
+  "extra_cases": [
+    {
+      "id": "known-fedora-zram",
+      "known": "fedora-zram",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-kohut",
+      "known": "kohut",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-roma-giunta",
+      "known": "roma-giunta",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-openwebui",
+      "known": "openwebui",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-rocket-matrix",
+      "known": "rocket-matrix",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-readynas-duo",
+      "known": "readynas-duo",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-ricette-whatsapp",
+      "known": "ricette-whatsapp",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-haccp-sicilia",
+      "known": "haccp-sicilia",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-blackout-17nov",
+      "known": "blackout-17nov",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-lhcb",
+      "known": "lhcb",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "known-tastiera-de-it",
+      "known": "tastiera-de-it",
+      "mode": "deep",
+      "answer_language": "it",
+      "checks": [
+        {
+          "type": "completes"
+        },
+        {
+          "type": "links_in_sources"
+        }
+      ]
+    },
+    {
+      "id": "conv-mentalizzazione",
+      "mode": "deep",
+      "answer_language": "it",
+      "turns": [
+        "Che cos'è la mentalizzazione?",
+        "E come si misura? Ci sono dei test?",
+        "Di quello più usato esiste una versione italiana validata? Dove l'hai letto?"
+      ],
+      "checks": [
+        {
+          "type": "completes"
+        }
+      ]
+    },
+    {
+      "id": "conv-caffe",
+      "mode": "deep",
+      "answer_language": "it",
+      "turns": [
+        "Perché il caffè costa così tanto adesso?",
+        "E nei prossimi mesi scende o sale ancora?",
+        "A casa facciamo tre moke al giorno: con i prezzi che mi hai detto, quanto spendiamo in un anno?"
+      ],
+      "checks": [
+        {
+          "type": "completes"
+        }
+      ]
+    },
+    {
+      "id": "conv-foto",
+      "mode": "deep",
+      "answer_language": "it",
+      "turns": [
+        "Come salvo le foto di famiglia senza usare il cloud?",
+        "Abbiamo un iPhone, un Android e un vecchio portatile Windows. Niente NAS per ora. In pratica come facciamo?",
+        "E che dischi compro? SSD o meccanici? Quanto grandi?"
+      ],
+      "checks": [
+        {
+          "type": "completes"
+        }
+      ]
+    },
+    {
+      "id": "conv-aral",
+      "mode": "deep",
+      "answer_language": "it",
+      "turns": [
+        "Cosa è successo al lago d'Aral?",
+        "E la parte a nord, adesso com'è messa? Stanno facendo altri lavori?",
+        "I numeri sulla superficie che mi hai dato all'inizio da dove vengono? Sono aggiornati?"
+      ],
+      "checks": [
+        {
+          "type": "completes"
+        }
+      ]
+    },
+    {
+      "id": "conv-podman",
+      "mode": "deep",
+      "answer_language": "it",
+      "turns": [
+        "Che differenza c'è tra Docker e Podman?",
+        "Io ho Fedora su un mini PC e uso docker compose. Mi conviene passare?",
+        "E i miei file compose funzionano così come sono?"
+      ],
+      "checks": [
+        {
+          "type": "completes"
+        }
+      ]
+    },
+    {
+      "id": "conv-revisione",
+      "mode": "deep",
+      "answer_language": "it",
+      "turns": [
+        "Ogni quanto va fatta la revisione dell'auto?",
+        "E per una moto?",
+        "Se la faccio in ritardo cosa rischio?"
+      ],
+      "checks": [
+        {
+          "type": "completes"
+        }
+      ]
+    }
+  ],
+  "suites": {
+    "conv": ["conv-mentalizzazione", "conv-caffe", "conv-foto", "conv-aral", "conv-podman", "conv-revisione"],
+    "known": ["known-fedora-zram", "known-kohut", "known-roma-giunta", "known-openwebui", "known-rocket-matrix", "software-howto-en", "recent-release-en", "eiffel-facts-it", "history-fact-it", "medical-evidence-en", "unanswerable-fictional", "multi-question-it", "conflicting-numbers-it", "agrivoltaico-normativo", "known-readynas-duo", "known-ricette-whatsapp", "known-blackout-17nov", "known-lhcb", "known-tastiera-de-it"],
+    "push": ["recent-event-it", "history-fact-it", "multi-question-it", "economics-concept-fr", "valencia-family-4d", "local-practical-de"],
+    "qd1c": ["recent-release-en", "consumer-compare-it", "local-practical-de", "multi-question-it", "valencia-family-4d", "history-fact-it", "agrivoltaico-normativo", "niri-shells-it"],
+    "reduced": [
+      "valencia-family-4d",
+      "weather-3d",
+      "speranza-philosophy-clinical",
+      "agrivoltaico-normativo",
+      "unanswerable-fictional",
+      "conflicting-numbers-it"
+    ],
+    "smoke": [
+      "weather-3d",
+      "eiffel-facts-it",
+      "software-howto-en"
+    ],
+    "core17": [
+      "valencia-family-4d",
+      "weather-3d",
+      "speranza-philosophy-clinical",
+      "agrivoltaico-normativo",
+      "software-howto-en",
+      "history-fact-it",
+      "medical-evidence-en",
+      "consumer-compare-it",
+      "recent-event-it",
+      "recent-release-en",
+      "conflicting-numbers-it",
+      "unanswerable-fictional",
+      "unanswerable-private",
+      "local-practical-de",
+      "economics-concept-fr",
+      "multi-question-it",
+      "eiffel-facts-it"
+    ],
+    "qb_new": [
+      "niri-shells-it",
+      "selfhost-sync-it"
+    ]
+  }
+}

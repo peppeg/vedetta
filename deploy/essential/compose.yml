@@ -1,0 +1,76 @@
+# Vedetta essential (map R8): Vedetta with its search (SearXNG) and its page reader
+# (Jina Reader), official images pinned to the versions Vedetta was measured with.
+# You bring the model; the first run in the browser asks for it.
+#
+#   cp .env.example .env
+#   echo "SEARXNG_SECRET=$(openssl rand -hex 32)" >> .env
+#   docker compose up -d          (podman compose up -d works the same)
+#   open http://localhost:3030
+#
+# Download about 1.8 GB, disk about 4 GB, memory about 1.5 GB, mostly for Jina (it runs a browser inside).
+# SearXNG and Jina are not published: only Vedetta uses them.
+# Jina follows redirects by itself, outside Vedetta's address filter: it can reach
+# what this machine reaches, home network included.
+name: vedetta
+
+services:
+  vedetta:
+    image: ghcr.io/peppeg/vedetta:0.2.4
+    restart: unless-stopped
+    ports:
+      - "${VEDETTA_PUBLISH:-127.0.0.1}:${VEDETTA_HOST_PORT:-3030}:3030"
+    env_file: .env
+    environment:
+      VEDETTA_PUBLISH: ${VEDETTA_PUBLISH:-127.0.0.1}
+      SEARXNG_API_URL: http://searxng:8080
+      JINA_READER_URL: http://jina:8081
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - vedetta-data:/app/data
+    # only its data can be written, and it can ask for no privilege
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    depends_on:
+      searxng:
+        condition: service_healthy
+      jina:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/app/vedetta", "health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+
+  searxng:
+    # 2026.11.18-b867c56a5
+    image: docker.io/searxng/searxng@sha256:6012a064924a032969a2e7989d66971803f126a237a2fb6c62f10ae3d82093e1
+    restart: unless-stopped
+    environment:
+      SEARXNG_SECRET: ${SEARXNG_SECRET:?write SEARXNG_SECRET in .env, see the top of compose.yml}
+    volumes:
+      - searxng-config:/etc/searxng # named: the image would make a nameless one at every start
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro,z
+      - searxng-cache:/var/cache/searxng
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+
+  jina:
+    # oss, revision 1574bfd (22 May 2026)
+    image: ghcr.io/jina-ai/reader@sha256:8cc9a5cf6dc9c240235fccc0026661de74b6e13c21b36e6a86b3281b9ef10f28
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://localhost:8081/"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+
+volumes:
+  vedetta-data:
+  searxng-config:
+  searxng-cache:

@@ -1,0 +1,11 @@
+# Only what the image needs: the Go sources, the embedded page and the version.
+*
+!go.mod
+!go.sum
+!main.go
+!VERSION
+!config/
+!internal/
+!web/
+**/*_test.go
+**/testdata/

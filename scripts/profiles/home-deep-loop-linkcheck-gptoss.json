@@ -1,0 +1,29 @@
+{
+  "_comment": "As home-deep-loop-linkcheck, with gpt-oss-120b (ggml-org MXFP4, Lemonade llama.cpp Vulkan, ctx 131072, parallel 1) on Lemonade (port 13305) instead of halogen. Sampling recommended by OpenAI for gpt-oss: temperature 1.0, top_p 1.0, no top_k. Run with bench.py --mode deep.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP": "true",
+    "LLM_EFFORT_DEEP": "medium",
+    "VEDETTA_DEEP_LOOP_REVIEW": "true",
+    "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_P": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_K": "0",
+    "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true",
+    "VEDETTA_DEEP_LOOP_COMPASS": "false",
+    "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true",
+    "VEDETTA_DEEP_LOOP_CITE_READ": "true",
+    "VEDETTA_DEEP_LOOP_LINK_CHECK": "true"
+  },
+  "llm_default_id": "default",
+  "llm_endpoints": [
+    {
+      "id": "default",
+      "name": "lemonade-gpt-oss-120b",
+      "base_url": "http://HOST:13305/api/v1",
+      "model": "gpt-oss-120b-mxfp-GGUF",
+      "paid": false
+    }
+  ],
+  "llm_base_url": "http://HOST:13305/api/v1",
+  "llm_model": "gpt-oss-120b-mxfp-GGUF",
+  "llm_api_key": ""
+}

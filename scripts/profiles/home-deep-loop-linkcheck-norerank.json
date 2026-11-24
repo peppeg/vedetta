@@ -1,0 +1,17 @@
+{
+  "_comment": "As home-deep-loop-linkcheck, with the reorder of the search results off: the model sees them in the search service's order (Piano dopo audit 3.1). Run with bench.py --mode deep.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP": "true",
+    "LLM_EFFORT_DEEP": "medium",
+    "VEDETTA_DEEP_LOOP_REVIEW": "true",
+    "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_P": "0.95",
+    "VEDETTA_DEEP_LOOP_TOP_K": "20",
+    "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true",
+    "VEDETTA_DEEP_LOOP_COMPASS": "false",
+    "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true",
+    "VEDETTA_DEEP_LOOP_CITE_READ": "true",
+    "VEDETTA_DEEP_LOOP_LINK_CHECK": "true",
+    "VEDETTA_DEEP_LOOP_RERANK": "false"
+  }
+}

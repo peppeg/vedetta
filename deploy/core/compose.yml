@@ -1,0 +1,39 @@
+# Vedetta core (map R8): only Vedetta. You bring the search (your SearXNG, or a key
+# for Brave, Tavily, Serper, Exa) and the model; the first run in the browser asks
+# for them and looks for the usual addresses by itself.
+#
+#   cp .env.example .env
+#   docker compose up -d          (podman compose up -d works the same)
+#   open http://localhost:3030
+#
+# Inside a container "localhost" is the container itself: a service running on
+# this machine is at host.docker.internal (Docker) or host.containers.internal
+# (Podman), for example http://host.docker.internal:8888 for SearXNG.
+name: vedetta
+
+services:
+  vedetta:
+    image: ghcr.io/peppeg/vedetta:0.2.4
+    restart: unless-stopped
+    ports:
+      - "${VEDETTA_PUBLISH:-127.0.0.1}:${VEDETTA_HOST_PORT:-3030}:3030"
+    env_file: .env
+    environment:
+      VEDETTA_PUBLISH: ${VEDETTA_PUBLISH:-127.0.0.1}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - vedetta-data:/app/data
+    # only its data can be written, and it can ask for no privilege
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "/app/vedetta", "health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+
+volumes:
+  vedetta-data:

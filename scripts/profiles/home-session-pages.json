@@ -1,0 +1,6 @@
+{
+  "_comment": "The home configuration and .env as they are, plus the follow-ups switch (Piano dopo audit 4.4): in a follow-up the pages read in the earlier turns count as seen and are listed to the model. Run with bench.py --suite conv --mode deep --live, against rounds without a profile.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP_SESSION_PAGES": "true"
+  }
+}

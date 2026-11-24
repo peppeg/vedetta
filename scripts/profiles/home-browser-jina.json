@@ -1,0 +1,5 @@
+{
+  "_comment": "V25-BROWSER B.6 ter: home profile with the browser reader between http and Jina (http, then an external headless browser over CDP, then Jina as last resort). Start the browser before the round, stop it after.",
+  "reader_providers": ["http", "browser", "jina"],
+  "browser_cdp_url": "http://127.0.0.1:9222"
+}

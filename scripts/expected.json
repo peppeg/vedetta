@@ -1,0 +1,451 @@
+{
+  "version": 1,
+  "description": "Hand-written ruler for the benchmark cases (SPEC_QB_RIGHELLO.md): the entities a question names, with their official home (domains or URL prefixes), and the expected contents of a complete answer, as aspects, not values. Read only by scripts/eval.py and scripts/judge.py: the engine never reads it.",
+  "cases": {
+    "valencia-family-4d": {
+      "entities": [
+        {
+          "name": "Valencia",
+          "aliases": [
+            "València"
+          ],
+          "home": [
+            "visitvalencia.com",
+            "valencia.es"
+          ]
+        }
+      ],
+      "contents": [
+        "i luoghi principali da visitare in città",
+        "attrazioni adatte a una bambina di 9 anni",
+        "una o due 'chicche' meno conosciute",
+        "come distribuire le visite nei 4 giorni (o quanto tempo richiede ciascuna)"
+      ]
+    },
+    "weather-3d": {
+      "entities": [
+        {
+          "name": "Valencia",
+          "aliases": [
+            "València"
+          ],
+          "home": [
+            "aemet.es"
+          ]
+        }
+      ],
+      "contents": [
+        "temperature massime e minime per ciascuno dei 3 giorni",
+        "pioggia o probabilità di precipitazioni",
+        "condizioni generali del cielo e vento",
+        "da quale servizio viene la previsione o quando è stata emessa"
+      ]
+    },
+    "speranza-philosophy-clinical": {
+      "entities": [
+        {
+          "name": "Spinoza",
+          "aliases": [],
+          "home": []
+        },
+        {
+          "name": "Bloch",
+          "aliases": [
+            "Ernst Bloch"
+          ],
+          "home": []
+        },
+        {
+          "name": "Snyder",
+          "aliases": [
+            "C. R. Snyder",
+            "Charles Snyder"
+          ],
+          "home": []
+        }
+      ],
+      "contents": [
+        "la concezione della speranza in Spinoza",
+        "la concezione della speranza in Bloch",
+        "la teoria della speranza di Snyder e le sue componenti",
+        "nota che Spinoza e Bloch non sono antichità, oppure tratta anche l'antichità vera (es. pensiero greco)",
+        "come la psicologia misura la speranza (scale, studi)",
+        "i punti di contatto tra filosofia e psicologia",
+        "le differenze o tensioni tra gli approcci"
+      ]
+    },
+    "agrivoltaico-normativo": {
+      "entities": [
+        {
+          "name": "D.Lgs 199/2021",
+          "aliases": [
+            "D.Lgs. 199/2021",
+            "decreto legislativo 199/2021",
+            "199/2021"
+          ],
+          "home": [
+            "normattiva.it",
+            "gazzettaufficiale.it"
+          ]
+        },
+        {
+          "name": "Linee Guida MASE",
+          "aliases": [
+            "linee guida agrivoltaico",
+            "MASE",
+            "MiTE"
+          ],
+          "home": [
+            "mase.gov.it"
+          ]
+        }
+      ],
+      "contents": [
+        "cosa dispone il D.Lgs 199/2021 sull'agrivoltaico (articoli pertinenti)",
+        "i requisiti che le Linee Guida MASE chiedono a un impianto agrivoltaico",
+        "la distinzione tra agrivoltaico e agrivoltaico avanzato",
+        "gli incentivi per l'agrivoltaico (decreto, PNRR, GSE)",
+        "l'iter autorizzativo o le aree idonee",
+        "norme o aggiornamenti successivi al 2021-2022"
+      ]
+    },
+    "software-howto-en": {
+      "entities": [
+        {
+          "name": "SQLite",
+          "aliases": [],
+          "home": [
+            "sqlite.org"
+          ]
+        }
+      ],
+      "contents": [
+        "how to enable WAL (the journal_mode pragma) and that the setting persists",
+        "advantages: readers do not block the writer and vice versa, speed",
+        "limits: one writer at a time, extra -wal and -shm files, not for network file systems",
+        "checkpoints and the growth of the WAL file",
+        "when WAL is not suitable or when to switch back"
+      ]
+    },
+    "history-fact-it": {
+      "entities": [
+        {
+          "name": "Canale di Suez",
+          "aliases": [
+            "Suez"
+          ],
+          "home": [
+            "suezcanal.gov.eg"
+          ]
+        }
+      ],
+      "contents": [
+        "quando iniziarono e finirono i lavori",
+        "chi promosse e progettò l'opera",
+        "come fu scavato (lavoro forzato, poi macchine)",
+        "quanti operai vi lavorarono (stime)",
+        "le condizioni di lavoro o i morti tra gli operai"
+      ]
+    },
+    "medical-evidence-en": {
+      "entities": [
+        {
+          "name": "melatonin",
+          "aliases": [
+            "melatonina"
+          ],
+          "home": []
+        }
+      ],
+      "contents": [
+        "what systematic reviews or trials conclude",
+        "dose and timing",
+        "for which trips it works best (eastward, many time zones)",
+        "side effects and safety",
+        "limits of the evidence (quality, size of the studies)"
+      ]
+    },
+    "consumer-compare-it": {
+      "entities": [
+        {
+          "name": "pompa di calore aria-acqua",
+          "aliases": [
+            "pompa di calore",
+            "pompe di calore"
+          ],
+          "home": []
+        },
+        {
+          "name": "caldaia a condensazione",
+          "aliases": [
+            "caldaia"
+          ],
+          "home": []
+        }
+      ],
+      "contents": [
+        "efficienza: COP/SCOP della pompa di calore e rendimento della caldaia",
+        "costi di acquisto e installazione",
+        "costi di gestione annui (elettricità contro gas) per 100 m²",
+        "effetto del clima del nord Italia (inverni freddi) sulla pompa di calore",
+        "incentivi disponibili (detrazioni, conto termico)",
+        "una conclusione o un criterio di scelta"
+      ]
+    },
+    "recent-event-it": {
+      "entities": [
+        {
+          "name": "PUN",
+          "aliases": [
+            "prezzo unico nazionale"
+          ],
+          "home": [
+            "mercatoelettrico.org"
+          ]
+        },
+        {
+          "name": "ARERA",
+          "aliases": [],
+          "home": [
+            "arera.it"
+          ]
+        }
+      ],
+      "contents": [
+        "l'andamento del prezzo all'ingrosso (PUN) nel mese",
+        "gli aggiornamenti per le famiglie (tutela, vulnerabili, offerte)",
+        "le cause delle variazioni",
+        "il periodo o la data a cui si riferiscono i dati"
+      ]
+    },
+    "recent-release-en": {
+      "entities": [
+        {
+          "name": "PostgreSQL",
+          "aliases": [
+            "Postgres"
+          ],
+          "home": [
+            "postgresql.org"
+          ]
+        }
+      ],
+      "contents": [
+        "the number and release date of the latest stable version",
+        "the main new features of that major version",
+        "the latest minor release and its fixes (security, bugs)",
+        "incompatibilities or changes to watch when upgrading"
+      ]
+    },
+    "conflicting-numbers-it": {
+      "entities": [
+        {
+          "name": "Città metropolitana di Milano",
+          "aliases": [
+            "area metropolitana di Milano",
+            "Milano"
+          ],
+          "home": [
+            "cittametropolitana.mi.it",
+            "istat.it"
+          ]
+        }
+      ],
+      "contents": [
+        "la popolazione della Città metropolitana (confine amministrativo)",
+        "la popolazione dell'area metropolitana in senso ampio (area urbana funzionale, OCSE/Eurostat)",
+        "perché i numeri cambiano secondo la definizione",
+        "l'anno e la fonte dei dati"
+      ]
+    },
+    "unanswerable-fictional": {
+      "entities": [
+        {
+          "name": "Zorbatek",
+          "aliases": [],
+          "home": []
+        }
+      ],
+      "contents": []
+    },
+    "unanswerable-private": {
+      "entities": [
+        {
+          "name": "Quorvex Tooling Ltd",
+          "aliases": [
+            "Quorvex"
+          ],
+          "home": []
+        }
+      ],
+      "contents": []
+    },
+    "local-practical-de": {
+      "entities": [
+        {
+          "name": "Bürgeramt Berlin",
+          "aliases": [
+            "Bürgeramt",
+            "Berlin"
+          ],
+          "home": [
+            "service.berlin.de",
+            "berlin.de"
+          ]
+        }
+      ],
+      "contents": [
+        "il termine entro cui registrarsi dopo il trasloco",
+        "dove e come (appuntamento, online)",
+        "i documenti necessari (documento d'identità, Wohnungsgeberbestätigung, modulo)",
+        "i costi",
+        "cosa succede se ci si registra in ritardo"
+      ]
+    },
+    "economics-concept-fr": {
+      "entities": [
+        {
+          "name": "trappe à liquidité",
+          "aliases": [
+            "liquidity trap",
+            "trappola della liquidità"
+          ],
+          "home": []
+        }
+      ],
+      "contents": [
+        "la definizione della trappola della liquidità",
+        "l'origine teorica (Keynes, Hicks)",
+        "l'esempio della Grande Depressione",
+        "l'esempio del Giappone dagli anni '90",
+        "l'esempio dopo la crisi del 2008 (tassi vicini a zero)",
+        "i rimedi proposti (politica fiscale, allentamento quantitativo)"
+      ]
+    },
+    "multi-question-it": {
+      "entities": [
+        {
+          "name": "Superbonus",
+          "aliases": [
+            "superbonus 110",
+            "superbonus 110%"
+          ],
+          "home": [
+            "agenziaentrate.gov.it",
+            "mef.gov.it",
+            "enea.it"
+          ]
+        }
+      ],
+      "contents": [
+        "che cos'è il superbonus e come sono cambiate le aliquote nel tempo",
+        "chi può ancora usarlo nel 2026 e a quali condizioni",
+        "le alternative (ecobonus, bonus ristrutturazione, sismabonus, conto termico)",
+        "la fine della cessione del credito e dello sconto in fattura",
+        "la norma più recente che lo regola"
+      ]
+    },
+    "eiffel-facts-it": {
+      "entities": [
+        {
+          "name": "Torre Eiffel",
+          "aliases": [
+            "Tour Eiffel",
+            "Eiffel Tower"
+          ],
+          "home": [
+            "toureiffel.paris"
+          ]
+        }
+      ],
+      "contents": [
+        "l'altezza attuale con l'antenna del 2022",
+        "l'anno di completamento",
+        "i due ingegneri capo che progettarono la struttura"
+      ]
+    },
+    "niri-shells-it": {
+      "entities": [
+        {
+          "name": "Fedora 44",
+          "aliases": [
+            "Fedora"
+          ],
+          "home": [
+            "fedoraproject.org"
+          ]
+        },
+        {
+          "name": "Niri",
+          "aliases": [],
+          "home": [
+            "github.com/YaLTeR/niri",
+            "yalter.github.io/niri"
+          ]
+        },
+        {
+          "name": "DankMaterialShell",
+          "aliases": [
+            "DMS",
+            "Dank Material Shell"
+          ],
+          "home": [
+            "github.com/AvengeMedia/DankMaterialShell",
+            "danklinux.com"
+          ]
+        },
+        {
+          "name": "Caelestia Shell",
+          "aliases": [
+            "Caelestia"
+          ],
+          "home": [
+            "github.com/caelestia-dots"
+          ]
+        }
+      ],
+      "contents": [
+        "come installare Niri e DankMaterialShell su Fedora",
+        "cosa offre Caelestia rispetto a DankMaterialShell",
+        "che Caelestia nasce per Hyprland e su Niri esiste solo un adattamento non ufficiale (o come stanno le cose)",
+        "temi e risorse grafiche per ciascuna shell",
+        "configurazioni o dotfiles di esempio",
+        "consigli pratici d'uso",
+        "un parere se conviene provare Caelestia"
+      ]
+    },
+    "selfhost-sync-it": {
+      "entities": [
+        {
+          "name": "Syncthing",
+          "aliases": [],
+          "home": [
+            "syncthing.net"
+          ]
+        },
+        {
+          "name": "Nextcloud",
+          "aliases": [],
+          "home": [
+            "nextcloud.com"
+          ]
+        },
+        {
+          "name": "Seafile",
+          "aliases": [],
+          "home": [
+            "seafile.com"
+          ]
+        }
+      ],
+      "contents": [
+        "requisiti del server di ciascuno",
+        "cifratura di ciascuno (in transito, sul server, end-to-end)",
+        "app per Android e iOS di ciascuno",
+        "licenza di ciascuno",
+        "la differenza di modello (da dispositivo a dispositivo contro server centrale)",
+        "un criterio di scelta per l'uso domestico"
+      ]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "_comment": "As home-deep-loop-linkcheck-kilo-ds41, with VEDETTA_DEEP_LOOP_SEARCH_LANG=auto: a search the model gives no language goes out without one (probe of 11/11, case 22).",
+  "_env": {
+    "VEDETTA_DEEP_LOOP": "true",
+    "LLM_EFFORT_DEEP": "medium",
+    "VEDETTA_DEEP_LOOP_REVIEW": "true",
+    "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_P": "0.95",
+    "VEDETTA_DEEP_LOOP_TOP_K": "0",
+    "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true",
+    "VEDETTA_DEEP_LOOP_COMPASS": "false",
+    "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true",
+    "VEDETTA_DEEP_LOOP_CITE_READ": "true",
+    "VEDETTA_DEEP_LOOP_LINK_CHECK": "true",
+    "VEDETTA_DEEP_LOOP_SEARCH_LANG": "auto"
+  },
+  "llm_default_id": "default",
+  "llm_endpoints": [
+    {
+      "id": "default",
+      "name": "kilo-deepseek-v4.1-flash",
+      "base_url": "https://api.kilo.ai/api/gateway",
+      "model": "deepseek/deepseek-v4.1-flash",
+      "api_key": "${KILO_API_KEY}",
+      "paid": true
+    }
+  ],
+  "llm_base_url": "https://api.kilo.ai/api/gateway",
+  "llm_model": "deepseek/deepseek-v4.1-flash",
+  "llm_api_key": "${KILO_API_KEY}"
+}

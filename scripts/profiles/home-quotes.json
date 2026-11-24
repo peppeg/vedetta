@@ -1,0 +1,6 @@
+{
+  "_comment": "The home configuration and .env as they are, plus the quote turn (Piano dopo audit, fase 6): after the answer, the model is asked for the passage of a page that says each sentence, and Go looks for it on the page; nothing is rewritten. Run with bench.py --mode deep --live.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP_QUOTES": "true"
+  }
+}

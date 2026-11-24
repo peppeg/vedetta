@@ -1,0 +1,29 @@
+{
+  "_comment": "As home-deep-loop-linkcheck, with DeepSeek V4 Flash on Gufo (port 8080) instead of halogen. Sampling recommended by DeepSeek for agents: temperature 1.0, top_p 0.95, no top_k. Run with bench.py --mode deep.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP": "true",
+    "LLM_EFFORT_DEEP": "medium",
+    "VEDETTA_DEEP_LOOP_REVIEW": "true",
+    "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_P": "0.95",
+    "VEDETTA_DEEP_LOOP_TOP_K": "0",
+    "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true",
+    "VEDETTA_DEEP_LOOP_COMPASS": "false",
+    "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true",
+    "VEDETTA_DEEP_LOOP_CITE_READ": "true",
+    "VEDETTA_DEEP_LOOP_LINK_CHECK": "true"
+  },
+  "llm_default_id": "default",
+  "llm_endpoints": [
+    {
+      "id": "default",
+      "name": "gufo-deepseek",
+      "base_url": "http://HOST:8080/v1",
+      "model": "DeepSeek V4 Flash",
+      "paid": false
+    }
+  ],
+  "llm_base_url": "http://HOST:8080/v1",
+  "llm_model": "DeepSeek V4 Flash",
+  "llm_api_key": ""
+}

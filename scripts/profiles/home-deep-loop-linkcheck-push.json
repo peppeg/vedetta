@@ -1,0 +1,17 @@
+{
+  "_comment": "As home-deep-loop-linkcheck, but at the first draft the model is asked once whether there is more to look for, before the sentinel's checks (Piano dopo audit 7.13). Run with bench.py --mode deep --suite push --no-judge.",
+  "_env": {
+    "VEDETTA_DEEP_LOOP": "true",
+    "LLM_EFFORT_DEEP": "medium",
+    "VEDETTA_DEEP_LOOP_REVIEW": "true",
+    "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0",
+    "VEDETTA_DEEP_LOOP_TOP_P": "0.95",
+    "VEDETTA_DEEP_LOOP_TOP_K": "20",
+    "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true",
+    "VEDETTA_DEEP_LOOP_COMPASS": "false",
+    "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true",
+    "VEDETTA_DEEP_LOOP_CITE_READ": "true",
+    "VEDETTA_DEEP_LOOP_LINK_CHECK": "true",
+    "VEDETTA_DEEP_LOOP_PUSH": "true"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "_comment": "APPUNTI_MOTORI_INFERENZA P0b: P0 plus the model's reasoning sent back with its tool calls. Run with bench.py --mode deep.",
+  "_env": {"VEDETTA_DEEP_LOOP": "true", "LLM_EFFORT_DEEP": "medium",
+           "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0", "VEDETTA_DEEP_LOOP_TOP_P": "0.95", "VEDETTA_DEEP_LOOP_TOP_K": "20",
+           "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true"}
+}

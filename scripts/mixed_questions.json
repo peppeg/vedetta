@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "description": "Domande in cui la lingua di chi chiede e quella dei titoli, dei nomi o delle espressioni citate sono diverse, con la lingua attesa della risposta (Piano dopo audit 2.4, per la 4.3 / D6). Argomenti diversi, nessuna presa da sessioni vere.",
+  "status": "approvate l'11/11/2026",
+  "questions": [
+    {"id": "mx01", "question": "spiegami the selfish gene di richard dawkins", "answer_language": "it", "cited": "en", "topic": "scienza, libro"},
+    {"id": "mx02", "question": "riassumimi la trama di the old man and the sea e dimmi perché è considerato importante", "answer_language": "it", "cited": "en", "topic": "letteratura"},
+    {"id": "mx03", "question": "che differenza c'è tra il paper deep residual learning for image recognition e le reti neurali precedenti?", "answer_language": "it", "cited": "en", "topic": "intelligenza artificiale"},
+    {"id": "mx04", "question": "come si usa git rebase --interactive per unire più commit in uno solo?", "answer_language": "it", "cited": "en", "topic": "software"},
+    {"id": "mx05", "question": "qual è il significato del titolo dell'album the dark side of the moon?", "answer_language": "it", "cited": "en", "topic": "musica"},
+    {"id": "mx06", "question": "cosa prevede la legge tedesca sul Mindestlohn e come è cambiata negli ultimi anni?", "answer_language": "it", "cited": "de", "topic": "lavoro, legge"},
+    {"id": "mx07", "question": "chi ha scritto la chanson de roland e in che secolo?", "answer_language": "it", "cited": "fr", "topic": "letteratura medievale"},
+    {"id": "mx08", "question": "di cosa parla el laberinto del fauno di guillermo del toro?", "answer_language": "it", "cited": "es", "topic": "cinema"},
+    {"id": "mx09", "question": "what does the italian phrase la dolce vita mean and where does it come from?", "answer_language": "en", "cited": "it", "topic": "lingua, cultura"},
+    {"id": "mx10", "question": "summary of i promessi sposi please", "answer_language": "en", "cited": "it", "topic": "letteratura"},
+    {"id": "mx11", "question": "how does the german Kurzarbeit scheme work and who pays for it?", "answer_language": "en", "cited": "de", "topic": "politica del lavoro"},
+    {"id": "mx12", "question": "explain the main argument of le deuxième sexe by simone de beauvoir", "answer_language": "en", "cited": "fr", "topic": "filosofia"},
+    {"id": "mx13", "question": "was bedeutet dolce far niente und wie benutzt man den Ausdruck heute?", "answer_language": "de", "cited": "it", "topic": "lingua"},
+    {"id": "mx14", "question": "Zusammenfassung von the great gatsby", "answer_language": "de", "cited": "en", "topic": "letteratura"},
+    {"id": "mx15", "question": "wie funktioniert docker compose up --build genau?", "answer_language": "de", "cited": "en", "topic": "software"},
+    {"id": "mx16", "question": "que raconte the catcher in the rye et pourquoi le livre a-t-il fait scandale ?", "answer_language": "fr", "cited": "en", "topic": "letteratura"},
+    {"id": "mx17", "question": "résumé de der steppenwolf de hermann hesse", "answer_language": "fr", "cited": "de", "topic": "letteratura"},
+    {"id": "mx18", "question": "explique-moi l'Energiewende allemande et ses résultats", "answer_language": "fr", "cited": "de", "topic": "energia"},
+    {"id": "mx19", "question": "¿de qué trata la película la vita è bella y quién la dirigió?", "answer_language": "es", "cited": "it", "topic": "cinema"},
+    {"id": "mx20", "question": "explícame el machine learning supervisado con un ejemplo sencillo", "answer_language": "es", "cited": "en", "topic": "tecnologia"}
+  ]
+}

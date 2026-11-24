@@ -1,0 +1,19 @@
+{
+  "_comment": "V25-M1.1 cloud profile: fields that replace the home data/config.local on the benchmark instance. No keys here: ${NAME} is filled from the repo .env at prepare time.",
+  "default_search_provider": "brave",
+  "search_providers": ["brave", "tavily"],
+  "reader_providers": ["http", "firecrawl"],
+  "llm_default_id": "default",
+  "llm_endpoints": [
+    {
+      "id": "default",
+      "name": "entrim-deepseek",
+      "base_url": "https://api.entrim.ai/v1",
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "api_key": "${ENTRIM_API_KEY}"
+    }
+  ],
+  "llm_base_url": "https://api.entrim.ai/v1",
+  "llm_model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "llm_api_key": "${ENTRIM_API_KEY}"
+}

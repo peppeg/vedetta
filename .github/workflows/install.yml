@@ -1,0 +1,30 @@
+# The installation with Docker, as deploy/README.md describes it: image, essential,
+# core, down to an answer (deploy/test/install.sh). It downloads about 1.8 GB, so it
+# runs only when something it installs changes, by hand, or before a release.
+name: install
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - VERSION
+      - deploy/**
+      - .github/workflows/install.yml
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: docker version && docker compose version && df -h /
+      - run: deploy/test/install.sh

@@ -1,0 +1,55 @@
+# A release, at every tag v*: the tests, the installation with Docker, then the Linux
+# programs (a draft release, to be published by hand) and the image for amd64 and
+# arm64 on ghcr.io. The tag must be the version in VERSION.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  install:
+    uses: ./.github/workflows/install.yml
+  publish:
+    needs: [test, install]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      packages: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: The tag is the version
+        run: test "$GITHUB_REF_NAME" = "v$(cat VERSION)"
+      - name: Programs
+        run: |
+          mkdir dist
+          for arch in amd64 arm64; do
+            CGO_ENABLED=0 GOOS=linux GOARCH=$arch go build -trimpath -ldflags "-s -w -X main.version=$(cat VERSION)" -o vedetta .
+            tar -czf "dist/vedetta-$(cat VERSION)-linux-$arch.tar.gz" vedetta LICENSE README.md .env.example
+            rm vedetta
+          done
+          cd dist && sha256sum -- *.tar.gz > SHA256SUMS
+      - name: Image
+        run: |
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker buildx create --use
+          docker buildx build --platform linux/amd64,linux/arm64 --push \
+            --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
+            --label "org.opencontainers.image.version=$(cat VERSION)" \
+            -t "ghcr.io/${GITHUB_REPOSITORY,,}:$(cat VERSION)" .
+      - name: Draft release
+        run: gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft --title "Vedetta $(cat VERSION)" --notes "" dist/*
