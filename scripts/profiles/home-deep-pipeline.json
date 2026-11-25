@@ -1,4 +1,0 @@
-{
-  "_comment": "PIANO_DEEP_A_CICLO M2: the home profile with the pipeline Deep (loop off), Deep effort medium as the loop. Run with bench.py --mode deep.",
-  "_env": {"VEDETTA_DEEP_LOOP": "false", "LLM_EFFORT_DEEP": "medium"}
-}

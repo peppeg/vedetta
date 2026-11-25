@@ -1,5 +1,0 @@
-{
-  "_comment": "V25-BROWSER B.6 home profile with the browser reader in place of Jina: http first, then an external headless browser over CDP (docs/SPEC_BROWSER_CDP.md). Start the browser before the round, stop it after.",
-  "reader_providers": ["http", "browser"],
-  "browser_cdp_url": "http://127.0.0.1:9222"
-}

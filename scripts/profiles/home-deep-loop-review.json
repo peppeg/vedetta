@@ -1,4 +1,0 @@
-{
-  "_comment": "PIANO_DEEP_A_CICLO point 3: Deep a ciclo with the sentinel's turn (the draft is sent back with the numbers and names not found in what the model saw). Temperature as M2 (0.2). Run with bench.py --mode deep.",
-  "_env": {"VEDETTA_DEEP_LOOP": "true", "LLM_EFFORT_DEEP": "medium", "VEDETTA_DEEP_LOOP_REVIEW": "true"}
-}

@@ -1,7 +1,0 @@
-{
-  "_comment": "Production Deep a ciclo (home-deep-loop-revk) plus PIANO_DEEP_A_CICLO §13 step 2: details seen only in search previews make the sentinel open the result page and send the sentence back with its passage. Run with bench.py --mode deep.",
-  "_env": {"VEDETTA_DEEP_LOOP": "true", "LLM_EFFORT_DEEP": "medium", "VEDETTA_DEEP_LOOP_REVIEW": "true",
-           "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0", "VEDETTA_DEEP_LOOP_TOP_P": "0.95", "VEDETTA_DEEP_LOOP_TOP_K": "20",
-           "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true", "VEDETTA_DEEP_LOOP_COMPASS": "false",
-           "VEDETTA_DEEP_LOOP_REVIEW_PREVIEWS": "true"}
-}

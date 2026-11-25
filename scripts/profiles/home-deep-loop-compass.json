@@ -1,6 +1,0 @@
-{
-  "_comment": "home-deep-loop-revk plus the compass: the system prompt says the model's memory may be out of date (check, read the pages). Run with bench.py --mode deep.",
-  "_env": {"VEDETTA_DEEP_LOOP": "true", "LLM_EFFORT_DEEP": "medium", "VEDETTA_DEEP_LOOP_REVIEW": "true",
-           "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0", "VEDETTA_DEEP_LOOP_TOP_P": "0.95", "VEDETTA_DEEP_LOOP_TOP_K": "20",
-           "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true", "VEDETTA_DEEP_LOOP_COMPASS": "true"}
-}

@@ -1,6 +1,0 @@
-{
-  "_comment": "Map R2b (18/11): home config with the read time of pages from the memory on (the bench turns it off by default), to try 'read it again now' (fresh: true) live.",
-  "_env": {
-    "VEDETTA_CACHE_READ_DATE": "true"
-  }
-}

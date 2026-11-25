@@ -1,6 +1,0 @@
-{
-  "_comment": "Production Deep a ciclo since 29/10 19:16: the sentinel's review, the model's recommended sampling and its reasoning sent back. Baseline for the compass. Run with bench.py --mode deep.",
-  "_env": {"VEDETTA_DEEP_LOOP": "true", "LLM_EFFORT_DEEP": "medium", "VEDETTA_DEEP_LOOP_REVIEW": "true",
-           "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0", "VEDETTA_DEEP_LOOP_TOP_P": "0.95", "VEDETTA_DEEP_LOOP_TOP_K": "20",
-           "VEDETTA_DEEP_LOOP_KEEP_REASONING": "true", "VEDETTA_DEEP_LOOP_COMPASS": "false"}
-}

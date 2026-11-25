@@ -1,5 +1,0 @@
-{
-  "_comment": "APPUNTI_MOTORI_INFERENZA P0: Deep a ciclo with the sampling recommended for Qwen3.8 Flash-Next with thinking (temperature 1.0, top_p 0.95, top_k 20). Run with bench.py --mode deep.",
-  "_env": {"VEDETTA_DEEP_LOOP": "true", "LLM_EFFORT_DEEP": "medium",
-           "VEDETTA_DEEP_LOOP_TEMPERATURE": "1.0", "VEDETTA_DEEP_LOOP_TOP_P": "0.95", "VEDETTA_DEEP_LOOP_TOP_K": "20"}
-}

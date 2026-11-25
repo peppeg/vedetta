@@ -1,5 +1,5 @@
 {
-  "_comment": "As home-deep-loop-citeread, with the check of the cited pages the model did not read (SPEC_LINK_CONTROLLATI). Run with bench.py --mode deep.",
+  "_comment": "The research loop with its checks on, the limits of our first rounds. Run with bench.py --mode deep.",
   "_env": {
     "VEDETTA_DEEP_LOOP": "true",
     "LLM_EFFORT_DEEP": "medium",
