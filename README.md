@@ -182,7 +182,7 @@ of an artificial intelligence.
 So far it took about 200 hours of work in two months, almost two billion tokens to write and
 check the code, and more than 70 hours of a Strix Halo for the tests. The project is in
 active development. If you see value in what has been done, we are looking for sponsors and
-donations: they go to the hours, to the paid services we try it on, and to a mortgage.
+donations: they help us to go on, to pay for the APIs and, yes, a mortgage too.
 
 **→ [Support Vedetta](https://github.com/sponsors/peppeg)**
 
