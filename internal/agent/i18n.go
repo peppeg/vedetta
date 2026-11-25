@@ -532,6 +532,27 @@ var stepMessages = map[string]map[string]string{
 		"fr": "Phrases avec une citation de moins de %d mots, trop courte pour servir de preuve et non cherchée : %d.",
 		"es": "Frases con una cita de menos de %d palabras, demasiado corta para servir de prueba y no buscada: %d.",
 	},
+	"deep_thought_step": {
+		"it": "Pensiero Profondo ci sta pensando. Ci vorranno sette secondi e mezzo",
+		"en": "Deep Thought is thinking about it. It will take seven and a half seconds",
+		"de": "Deep Thought denkt darüber nach. Es wird siebeneinhalb Sekunden dauern",
+		"fr": "Deep Thought y réfléchit. Il lui faudra sept secondes et demie",
+		"es": "Deep Thought lo está pensando. Tardará siete segundos y medio",
+	},
+	"deep_thought_note": {
+		"it": "Ha risposto Pensiero Profondo, in sette secondi e mezzo: la prima volta gli erano serviti sette milioni e mezzo di anni. Nessuna ricerca, nessuna pagina letta, nessun modello. Si spegne in Impostazioni → Sperimentale.",
+		"en": "Deep Thought answered, in seven and a half seconds: the first time it needed seven and a half million years. No search, no page read, no model. To turn it off: Settings → Experimental.",
+		"de": "Deep Thought hat geantwortet, in siebeneinhalb Sekunden: Beim ersten Mal brauchte er siebeneinhalb Millionen Jahre. Keine Suche, keine gelesene Seite, kein Modell. Ausschalten: Settings → Experimental.",
+		"fr": "Deep Thought a répondu, en sept secondes et demie : la première fois, il lui avait fallu sept millions et demi d'années. Aucune recherche, aucune page lue, aucun modèle. Pour l'éteindre : Settings → Experimental.",
+		"es": "Respondió Deep Thought, en siete segundos y medio: la primera vez necesitó siete millones y medio de años. Ninguna búsqueda, ninguna página leída, ningún modelo. Se apaga en Settings → Experimental.",
+	},
+	"loop_basis_quotes": {
+		"it": "La risposta non ha link alle pagine lette: le frasi ritrovate lì sono elencate in «%s».",
+		"en": "The answer has no links to the pages read: the sentences found there are listed under “%s”.",
+		"de": "Die Antwort enthält keine Links zu den gelesenen Seiten: Die dort wiedergefundenen Sätze stehen unter „%s“.",
+		"fr": "La réponse n'a pas de liens vers les pages lues : les phrases qui y ont été retrouvées sont listées dans « %s ».",
+		"es": "La respuesta no tiene enlaces a las páginas leídas: las frases encontradas allí están en «%s».",
+	},
 	"loop_quotes_unusable": {
 		"it": "Vedetta ha chiesto al modello da dove viene ogni frase, ma non ha avuto una risposta utilizzabile.",
 		"en": "Vedetta asked the model where each sentence comes from, but did not get a usable reply.",

@@ -783,8 +783,12 @@ func (e *Engine) executeDeepLoop(ctx context.Context, params SearchParams, emit 
 		log.Printf("[telemetry] session=%s llm_trouble=%s", params.SessionID, formatLLMTrouble(troubleRec))
 		notes += llmTroubleNote(troubleRec, params.AnswerLanguage)
 	}
-	provenance := loopProvenance(l.stats.PagesCited+l.stats.PagesCitedBefore, partial, troubleRec != nil)
+	basis := l.stats.basis()
+	provenance := loopProvenance(basis, partial, troubleRec != nil)
 	notes += loopProvenanceNote(provenance, params.AnswerLanguage, l.stats.Calls > 0, l.linkCheck)
+	if provenance == ProvenanceResearched {
+		notes += basisNote(basis, params.AnswerLanguage)
+	}
 	fullAnswer.WriteString(notes)
 	_ = l.emit(Event{Type: EventToken, Data: notes})
 

@@ -38,13 +38,42 @@ func ComputeProvenance(factsCited int, partial, degraded bool) Provenance {
 	}
 }
 
+// loopBasis is what the pages the model read give to an answer of the Deep a ciclo. An
+// answer with none of it rests on previews and on the model's knowledge, also when Vedetta
+// opened some of the pages it links: that is a check, not a reading.
+type loopBasis struct {
+	cited  int // pages read, in this turn or before, that the answer links
+	quotes int // sentences whose quote was found on a page read
+}
+
+func (s LoopStats) basis() loopBasis {
+	b := loopBasis{cited: s.PagesCited + s.PagesCitedBefore}
+	if s.Quotes == "done" {
+		for _, it := range s.QuoteItems {
+			if it.State == quoteFound {
+				b.quotes++
+			}
+		}
+	}
+	return b
+}
+
 // loopProvenance is ComputeProvenance for the Deep a ciclo, where nothing is a
-// verified fact: citing a page read makes an answer researched, not grounded.
-func loopProvenance(pagesCited int, partial, degraded bool) Provenance {
-	if p := ComputeProvenance(pagesCited, partial, degraded); p != ProvenanceGrounded {
+// verified fact: pages behind the answer make it researched, not grounded.
+func loopProvenance(b loopBasis, partial, degraded bool) Provenance {
+	if p := ComputeProvenance(b.cited+b.quotes, partial, degraded); p != ProvenanceGrounded {
 		return p
 	}
 	return ProvenanceResearched
+}
+
+// basisNote completes the line of a researched answer that links no page the model read:
+// the pages are there, but not where the reader would look for them.
+func basisNote(b loopBasis, lang string) string {
+	if b.cited > 0 || b.quotes == 0 {
+		return ""
+	}
+	return " " + StepMessage(lang, "loop_basis_quotes", StepMessage(lang, "loop_quotes_list_title"))
 }
 
 // loopProvenanceNote is provenanceNote for the Deep a ciclo. After a research, an

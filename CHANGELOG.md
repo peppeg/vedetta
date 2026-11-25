@@ -24,7 +24,5 @@ The first public version. We have the answer; the question is up to you.
 - Vedetta may open a page to check one detail and not show the model the rest of it.
 - "7 million and a half" is read as 7 million, and the number can be marked as not found.
 - A number with more than 16 digits is compared, and shown, rounded.
-- An answer with no links is called "from the model's memory" even when its sentences were found
-  on a page it read.
 
 What we measured, and what we did not, is in [Measurements](guide/measurements.md).

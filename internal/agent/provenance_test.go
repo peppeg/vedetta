@@ -54,7 +54,7 @@ func TestLoopProvenance_NeverVerified(t *testing.T) {
 		{3, false, true, ProvenanceDegraded},
 	}
 	for _, c := range cases {
-		if got := loopProvenance(c.cited, c.partial, c.degrade); got != c.want {
+		if got := loopProvenance(loopBasis{cited: c.cited}, c.partial, c.degrade); got != c.want {
 			t.Errorf("loopProvenance(%d,%v,%v) = %s, want %s", c.cited, c.partial, c.degrade, got, c.want)
 		}
 	}
@@ -109,6 +109,42 @@ func TestLoopProvenanceNote_JudgmentsAreTheModels(t *testing.T) {
 		for _, checked := range []bool{true, false} {
 			if got := loopProvenanceNote(ProvenanceResearched, lang, true, checked); !strings.Contains(got, w) {
 				t.Errorf("%s checked=%t: %q misses %q", lang, checked, got, w)
+			}
+		}
+	}
+}
+
+// Session 42a545c9 (25/11/2026): no link in the answer, 11 sentences of 15 with their quote
+// found on the page read, and the line said "from previews and the model's knowledge".
+func TestLoopBasis(t *testing.T) {
+	items := []QuoteItem{{State: quoteFound}, {State: quoteShort}, {State: quoteNotFound}, {State: quoteNone}, {State: quoteFound}}
+	cases := []struct {
+		name  string
+		stats LoopStats
+		want  Provenance
+		note  string // key of the sentence added to the line
+	}{
+		{"nothing behind it", LoopStats{}, ProvenanceParametric, ""},
+		{"a page read is linked", LoopStats{PagesCited: 1, Quotes: "done", QuoteItems: items}, ProvenanceResearched, ""},
+		{"a page read before is linked", LoopStats{PagesCitedBefore: 1}, ProvenanceResearched, ""},
+		{"no link, quotes found", LoopStats{Quotes: "done", QuoteItems: items}, ProvenanceResearched, "loop_basis_quotes"},
+		{"no link, quotes not found or too short", LoopStats{Quotes: "done", QuoteItems: items[1:4]}, ProvenanceParametric, ""},
+		{"the reply on the quotes was not usable", LoopStats{Quotes: "format", QuoteItems: items}, ProvenanceParametric, ""},
+		{"linked pages opened by Vedetta", LoopStats{LinkStates: map[string]string{"https://a.test/": linkPartial, "https://b.test/": linkUnread}}, ProvenanceParametric, ""},
+		{"linked pages nobody opened", LoopStats{LinkStates: map[string]string{"https://b.test/": linkUnread, "https://c.test/": linkAddress}}, ProvenanceParametric, ""},
+	}
+	for _, c := range cases {
+		b := c.stats.basis()
+		if got := loopProvenance(b, false, false); got != c.want {
+			t.Errorf("%s: %s, want %s", c.name, got, c.want)
+		}
+		for _, lang := range []string{"it", "en", "de", "fr", "es"} {
+			want := ""
+			if c.note != "" {
+				want = " " + StepMessage(lang, c.note, StepMessage(lang, "loop_quotes_list_title"))
+			}
+			if got := basisNote(b, lang); got != want || strings.Contains(got, "%") {
+				t.Errorf("%s (%s): %q, want %q", c.name, lang, got, want)
 			}
 		}
 	}
