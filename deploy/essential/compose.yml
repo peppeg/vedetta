@@ -15,7 +15,7 @@ name: vedetta
 
 services:
   vedetta:
-    image: ghcr.io/peppeg/vedetta:0.2.4
+    image: ghcr.io/peppeg/vedetta:0.4.2
     restart: unless-stopped
     ports:
       - "${VEDETTA_PUBLISH:-127.0.0.1}:${VEDETTA_HOST_PORT:-3030}:3030"

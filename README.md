@@ -130,6 +130,9 @@ computer, SearXNG to search, the built-in reader and Jina Reader to read. Some w
 other models, at home and in the cloud: DeepSeek, Gemma, gpt-oss, Nemotron, LFM. With another
 model the results can change a lot.
 
+The numbers of the last rounds, with the errors we found, are in
+[Measurements](guide/measurements.md).
+
 ## Your data
 
 Searches, settings and keys stay on your computer. There is no account, and nothing is sent
@@ -154,6 +157,7 @@ Vedetta, if you already have the services, or Vedetta with SearXNG and Jina Read
 | [Services and settings](guide/settings.md) | models, search, page readers, options |
 | [Experiments](guide/experiments.md) | what we tried, what is on and what is off |
 | [How a research works](guide/how-it-works.md) | the steps, the checks, the marks in an answer |
+| [Measurements](guide/measurements.md) | the last tests, their errors, what we did not measure |
 | [Your data](guide/your-data.md) | what Vedetta keeps, and how to delete it |
 | [Security](guide/security.md) | who can reach Vedetta, and what it protects from |
 | [Development](guide/development.md) | building, testing, where things are |
