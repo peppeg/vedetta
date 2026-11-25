@@ -45,3 +45,7 @@ a host different from the one it was set for, nor shown again in the interface.
 
 The image has no shell and runs as a normal user. The packages give it a read-only file
 system, except for its data, and no privilege.
+
+## If you find a problem
+
+Tell us in private: [how](../SECURITY.md).

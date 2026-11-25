@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.2 (not released yet)
+## 0.4.2 (25 November 2026)
 
 The first public version. We have the answer; the question is up to you.
 
