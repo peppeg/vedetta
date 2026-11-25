@@ -24,8 +24,8 @@ echo "SEARXNG_SECRET=$(openssl rand -hex 32)" >> .env
 docker compose up -d
 ```
 
-If it stops with a long error, read the **last line**: it says which value is missing
-in `.env`.
+If it stops with a long error, don't panic. Read the **last line**: it says which value is
+missing in `.env`.
 
 The first start downloads about 1.8 GB, mostly Jina Reader. The whole package takes
 about 4 GB of disk and up to 1.5 GB of memory.

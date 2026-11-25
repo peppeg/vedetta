@@ -240,5 +240,5 @@ func main() {
 		log.Printf("Error during shutdown: %v", err)
 	}
 
-	log.Println("Vedetta stopped.")
+	log.Println("Vedetta stopped. So long, and thanks for all the fish.")
 }
