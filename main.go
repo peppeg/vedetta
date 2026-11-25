@@ -210,6 +210,7 @@ func main() {
 	engine.SetDeepLoopQuotes(cfg.DeepLoopQuotes)
 	engine.SetDeepLoopPush(cfg.DeepLoopPush)
 	engine.SetDeepLoopGrant(cfg.DeepLoopGrant)
+	engine.SetDeepThought(cfg.DeepThought)
 	engine.SetCacheReadDate(cfg.CacheReadDate)
 	agent.SetNameWords(cfg.DeepLoopNameWords)
 	agent.SetLangDetectV2(cfg.LangDetect >= 2)

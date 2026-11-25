@@ -259,4 +259,14 @@ func TestConfigHandler_ExperimentalLevers(t *testing.T) {
 	if raw, _ = os.ReadFile(path); rec.Code != http.StatusOK || !engine.DeepLoopGrant() || !strings.Contains(string(raw), `"deep_loop_grant": true`) {
 		t.Errorf("special permission: code %d, engine %t, saved %s", rec.Code, engine.DeepLoopGrant(), raw)
 	}
+
+	for _, want := range []bool{true, false} {
+		body, _ = json.Marshal(ConfigUpdateRequest{DeepThought: &want})
+		rec = httptest.NewRecorder()
+		handlers.Config(rec, httptest.NewRequest(http.MethodPost, "/api/config", bytes.NewReader(body)))
+		raw, _ = os.ReadFile(path)
+		if rec.Code != http.StatusOK || engine.DeepThought() != want || strings.Contains(string(raw), "deep_thought") != want || !engine.DeepLoopGrant() {
+			t.Errorf("Deep Thought %t: code %d, engine %t, saved %s", want, rec.Code, engine.DeepThought(), raw)
+		}
+	}
 }

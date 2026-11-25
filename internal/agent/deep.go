@@ -101,6 +101,9 @@ func (e *Engine) ExecuteDeepPath(ctx context.Context, params SearchParams, emit 
 	// Resolve the answer language now that the session is known (UI locale != answer language).
 	e.resolveAnswerLanguage(&params)
 
+	if e.deepThought.Load() {
+		return e.answerDeepThought(ctx, params, safeEmit)
+	}
 	err := e.executeDeepLoop(ctx, params, safeEmit, sp, cr, llmClient, cacheSess, history, trouble)
 	if errors.Is(err, errLoopUnsupported) {
 		// A server that refuses tools cannot run the research: said in words, no fallback.

@@ -761,6 +761,10 @@ a.chip:hover{border-color:var(--line-2);color:var(--text)}
             <div class="k"><span data-t="exp_lines"></span><small data-t="exp_lines_desc"></small></div>
             <button class="toggle" id="expLines" role="switch" data-lever="deep_loop_review_lines"><span></span></button>
           </div>
+          <div class="row">
+            <div class="k"><span data-t="exp_thought"></span><small data-t="exp_thought_desc"></small></div>
+            <button class="toggle" id="expThought" role="switch" data-lever="deep_thought"><span></span></button>
+          </div>
           <span id="expMsg"></span>
         </div>
         <div class="card hidden" id="redoCard">
@@ -891,6 +895,7 @@ const T = {
     exp_push: 'Continua a cercare', exp_push_desc: 'Quando il modello ha scritto la prima bozza, Vedetta gli chiede una volta se c\'è altro da cercare, prima dei suoi controlli. Le risposte hanno più fonti, spesso gli originali; ci vuole più tempo. Utile con i modelli che si fermano presto.',
     exp_grant: 'Permesso speciale', exp_grant_desc: 'Quando una ricerca arriva al limite di ricerche e letture ma sta ancora trovando pagine nuove, Vedetta gliene concede altre 40, al massimo due volte. Scatta di rado. La ricerca dura di più e, con servizi a pagamento, costa di più. È ancora in prova: non sappiamo se le risposte migliorano.',
     exp_lines: 'Riscrivi solo le frasi segnalate', exp_lines_desc: 'Riscrive solo le frasi segnalate: più rapido e un po\' più economico sui servizi a pagamento. Le altre frasi non vengono ricontrollate dal modello.',
+    exp_thought: 'Pensiero Profondo (Deep Thought)', exp_thought_desc: 'Risponde a qualsiasi domanda, in sette secondi e mezzo e senza cercare niente. La risposta è giusta, ma bisogna conoscere bene la domanda.',
     exp_saved: 'Salvato: vale dalla prossima ricerca.', exp_err: 'Non salvato.',
     mem_title: 'Memoria di ricerche e pagine', mem_desc: (s, p) => `Vedetta ricorda le ricerche per ${s} e le pagine lette per ${p}: una domanda simile non le rifà, e una pagina presa dalla memoria dice al modello in che giorno è stata letta.`,
     mem_auto: 'Quello che scade si cancella da solo.', mem_use: b => `Occupa ${b}`, mem_empty: 'È vuota', mem_items: n => n === 1 ? '1 ricerca o pagina' : `${n} ricerche e pagine`,
@@ -995,6 +1000,7 @@ const T = {
     exp_push: 'Keep searching', exp_push_desc: 'When the model has written its first draft, Vedetta asks it once whether there is more to look for, before its checks. Answers have more sources, often the originals; it takes longer. Useful with models that stop early.',
     exp_grant: 'Special permission', exp_grant_desc: 'When a research reaches the limit of searches and readings but is still finding new pages, Vedetta allows 40 more, twice at most. It rarely happens. The research takes longer and, on paid services, costs more. Still being tried: we do not know whether answers get better.',
     exp_lines: 'Rewrite only the flagged sentences', exp_lines_desc: 'Rewrites only the flagged sentences: faster and a little cheaper on paid services. The other sentences are not checked again by the model.',
+    exp_thought: 'Deep Thought', exp_thought_desc: 'Answers any question, in seven and a half seconds and without searching anything. The answer is right, but you have to know the question well.',
     exp_saved: 'Saved: it applies from the next search.', exp_err: 'Not saved.',
     mem_title: 'Memory of searches and pages', mem_desc: (s, p) => `Vedetta remembers searches for ${s} and the pages it read for ${p}: a similar question does not run them again, and a page taken from the memory tells the model the day it was read.`,
     mem_auto: 'What expires is deleted by itself.', mem_use: b => `Uses ${b}`, mem_empty: 'It is empty', mem_items: n => n === 1 ? '1 search or page' : `${n} searches and pages`,
@@ -1173,7 +1179,7 @@ $('#expCard').addEventListener('click', e => {
   b.disabled = true;
   fetch('/api/config', { method: 'POST', headers: cfgHeaders({ 'Content-Type': 'application/json' }), body: JSON.stringify({ [lever]: want }) })
     .then(r => r.ok ? r.json() : Promise.reject())
-    .then(c => { ['deep_loop_push', 'deep_loop_grant', 'deep_loop_review_lines'].forEach(k => { config[k] = c[k] }); renderExp(t('exp_saved')) })
+    .then(c => { ['deep_loop_push', 'deep_loop_grant', 'deep_loop_review_lines', 'deep_thought'].forEach(k => { config[k] = c[k] }); renderExp(t('exp_saved')) })
     .catch(() => renderExp(t('exp_err'), true))
     .finally(() => { b.disabled = false });
 });

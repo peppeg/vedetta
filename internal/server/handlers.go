@@ -624,6 +624,7 @@ type ConfigResponse struct {
 	DeepLoopPush        bool `json:"deep_loop_push"`
 	DeepLoopGrant       bool `json:"deep_loop_grant"`
 	QuietLog            bool `json:"quiet_log"` // map R7
+	DeepThought         bool `json:"deep_thought"`
 	PaidFallback        bool `json:"paid_fallback"`
 	SetupDone           bool `json:"setup_done"` // map R8: false shows the first run
 }
@@ -657,7 +658,8 @@ type ConfigUpdateRequest struct {
 	DeepLoopPush        *bool `json:"deep_loop_push,omitempty"`
 	DeepLoopGrant       *bool `json:"deep_loop_grant,omitempty"`
 	// Map R7: "Registro con meno dettagli", chosen in Settings.
-	QuietLog *bool `json:"quiet_log,omitempty"`
+	QuietLog    *bool `json:"quiet_log,omitempty"`
+	DeepThought *bool `json:"deep_thought,omitempty"`
 	// Map R8: true ends the first run, false opens it again.
 	SetupDone *bool `json:"setup_done,omitempty"`
 }
@@ -771,6 +773,9 @@ func applyConfigUpdate(cfg *config.Config, req *ConfigUpdateRequest) error {
 	}
 	if req.DeepLoopGrant != nil {
 		cfg.DeepLoopGrant, cfg.DeepLoopGrantChosen = *req.DeepLoopGrant, true
+	}
+	if req.DeepThought != nil {
+		cfg.DeepThought = *req.DeepThought
 	}
 	if req.QuietLog != nil {
 		cfg.QuietLog, cfg.QuietLogChosen = *req.QuietLog, true
@@ -1045,6 +1050,7 @@ func (h *Handlers) writeConfigResponse(w http.ResponseWriter) {
 		DeepLoopPush:          h.engine.DeepLoopPush(),
 		DeepLoopGrant:         h.engine.DeepLoopGrant(),
 		QuietLog:              logquiet.On(),
+		DeepThought:           h.engine.DeepThought(),
 		SetupDone:             cfg.SetupDone,
 		DefaultLLMEndpoint:    cfg.LLMDefaultID,
 		ActiveSearchProvider:  h.engine.SearchProviderName(),
@@ -1205,6 +1211,7 @@ func (h *Handlers) Config(w http.ResponseWriter, r *http.Request) {
 		h.engine.SetDeepLoopReviewLines(candidate.DeepLoopReviewLines)
 		h.engine.SetDeepLoopPush(candidate.DeepLoopPush)
 		h.engine.SetDeepLoopGrant(candidate.DeepLoopGrant)
+		h.engine.SetDeepThought(candidate.DeepThought)
 		logquiet.Set(candidate.QuietLog)
 
 		h.writeConfigResponse(w)

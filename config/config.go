@@ -201,6 +201,8 @@ type Config struct {
 	// From VEDETTA_QUIET_LOG, or chosen in Settings (saved, stronger than .env).
 	QuietLog       bool
 	QuietLogChosen bool
+	// DeepThought (Sperimentale) is set from Settings only: deepthought.go.
+	DeepThought bool
 }
 
 func Load() *Config {
@@ -585,7 +587,8 @@ type LocalConfigFile struct {
 	DeepLoopPush        *bool `json:"deep_loop_push,omitempty"`
 	DeepLoopGrant       *bool `json:"deep_loop_grant,omitempty"`
 	// Map R7: present only when chosen in Settings.
-	QuietLog *bool `json:"quiet_log,omitempty"`
+	QuietLog    *bool `json:"quiet_log,omitempty"`
+	DeepThought bool  `json:"deep_thought,omitempty"`
 	// Map R6b: codes set in Settings, as salted hashes, never the codes.
 	AccessCodeHash  string `json:"access_code_hash,omitempty"`
 	ConfigTokenHash string `json:"settings_code_hash,omitempty"`
@@ -653,6 +656,7 @@ func SaveLocalConfig(path string, cfg *Config) error {
 		v := cfg.QuietLog
 		f.QuietLog = &v
 	}
+	f.DeepThought = cfg.DeepThought
 	f.AccessCodeHash, f.ConfigTokenHash = cfg.AccessCodeHash, cfg.ConfigTokenHash
 	setupDone := cfg.SetupDone
 	f.SetupDone = &setupDone
@@ -789,6 +793,7 @@ func loadLocalConfig(path string, cfg *Config) error {
 	if f.DeepLoopGrant != nil {
 		cfg.DeepLoopGrant, cfg.DeepLoopGrantChosen = *f.DeepLoopGrant, true
 	}
+	cfg.DeepThought = f.DeepThought
 	if f.QuietLog != nil {
 		cfg.QuietLog, cfg.QuietLogChosen = *f.QuietLog, true
 	}

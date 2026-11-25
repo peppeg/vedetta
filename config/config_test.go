@@ -191,6 +191,21 @@ func TestLocalConfig_ExperimentalLevers(t *testing.T) {
 	if cfg := Load(); !cfg.DeepLoopGrant || !cfg.DeepLoopGrantChosen {
 		t.Error("special permission chosen on was not loaded")
 	}
+	if cfg := Load(); cfg.DeepThought {
+		t.Error("Deep Thought on, never chosen")
+	}
+	if err := SaveLocalConfig(path, &Config{DeepThought: true}); err != nil {
+		t.Fatal(err)
+	}
+	if cfg := Load(); !cfg.DeepThought {
+		t.Error("Deep Thought chosen on was not loaded")
+	}
+	if err := SaveLocalConfig(path, &Config{}); err != nil {
+		t.Fatal(err)
+	}
+	if cfg := Load(); cfg.DeepThought {
+		t.Error("Deep Thought turned off stayed on")
+	}
 }
 
 // Map R6: a new installation answers only from this machine.

@@ -107,6 +107,7 @@ type Engine struct {
 	deepLoopSessionPages bool        // a follow-up counts the pages of the earlier turns as seen and lists them to the model, VEDETTA_DEEP_LOOP_SESSION_PAGES
 	deepLoopPush         atomic.Bool // at the first draft the model is asked once to go on with the research, VEDETTA_DEEP_LOOP_PUSH or Settings (map R3)
 	deepLoopGrant        atomic.Bool // more calls at the cap, when the research is still opening new pages, VEDETTA_DEEP_LOOP_GRANT or Settings
+	deepThought          atomic.Bool // every question gets the answer (deepthought.go), Settings only
 	cacheReadDate        bool        // a page read on another day says when, VEDETTA_CACHE_READ_DATE
 	deepLoopReviewLines  atomic.Bool // after the review the model rewrites only the lines sent back, VEDETTA_DEEP_LOOP_REVIEW_LINES or Settings (map R3)
 }

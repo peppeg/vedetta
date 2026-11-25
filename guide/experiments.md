@@ -11,9 +11,9 @@ gives the same answer.
 
 ## How to change one
 
-- **From the interface:** the first three are in **Settings → Experimental**. They apply
+- **From the interface:** the first three, and Deep Thought, are in **Settings → Experimental**. They apply
   from the next search.
-- **From `.env`:** all of them. Add the line, then restart Vedetta (with the packages,
+- **From `.env`:** all the others, and the first three too. Add the line, then restart Vedetta (with the packages,
   `docker compose up -d`). For the first three, what is set in the interface wins.
 
 Change one thing at a time, and ask the same question a few times before and after.
@@ -31,6 +31,7 @@ Change one thing at a time, and ask the same question a few times before and aft
 | **Second version of the built-in reader.** Keeps links, dates and empty cells of tables | Longer pages, no better answers | `VEDETTA_HTTP_READER=2` |
 | **Italian preset.** Favours some Italian official sources, mostly on energy | Useful only for those questions | `VEDETTA_PRESET_IT=true` |
 | **Embeddings** to order the search results, from a service of yours | Not measured in the present version | `EMBEDDINGS_URL=`… |
+| **Deep Thought.** Answers any question, in seven and a half seconds and without searching anything | Always the same answer, and it is right. We are still looking for the question | only in Settings |
 
 ## On
 

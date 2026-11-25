@@ -66,7 +66,7 @@ for line in open(envfile):
 cfg = json.load(open(home))
 # map R3: the levers chosen in the home Settings stay out; the bench sets them with
 # the profile's "_env" (or as fields of the profile)
-for k in ("deep_loop_review_lines", "deep_loop_push", "deep_loop_grant", "quiet_log"):
+for k in ("deep_loop_review_lines", "deep_loop_push", "deep_loop_grant", "quiet_log", "deep_thought"):
     cfg.pop(k, None)
 def fill(v):
     if isinstance(v, str):
@@ -139,7 +139,7 @@ prepare_instance() {
 		# map R3: without the levers chosen in the home Settings (the bench sets them in .env)
 		python3 -c 'import json, sys
 cfg = json.load(open(sys.argv[1]))
-for k in ("deep_loop_review_lines", "deep_loop_push", "deep_loop_grant", "quiet_log"):
+for k in ("deep_loop_review_lines", "deep_loop_push", "deep_loop_grant", "quiet_log", "deep_thought"):
     cfg.pop(k, None)
 json.dump(cfg, open(sys.argv[2], "w"), indent=2)' "$REPO/data/config.local" "$BENCH/data/config.local"
 		echo home > "$BENCH/profile.txt"
