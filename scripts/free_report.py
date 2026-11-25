@@ -424,8 +424,8 @@ def compute_round(name, out_dir, db, cache_root, expected, languages=None, still
                   "outside_results": outside, "outside_results_ok": outside_ok},
         "error_pages": error_pages,
         "lang_match": lang_match,
-        "quotes": {"asked": sum(quote_states[k] for k in ("found", "not_found", "none")), "found": quote_states["found"],
-                   "not_found": quote_states["not_found"], "none": quote_states["none"], "unasked": quote_states["unasked"],
+        "quotes": {"asked": sum(quote_states[k] for k in ("found", "not_found", "short", "none")), "found": quote_states["found"],
+                   "not_found": quote_states["not_found"], "short": quote_states["short"], "none": quote_states["none"], "unasked": quote_states["unasked"],
                    "answers": dict(quote_answers),
                    "seconds_median": statistics.median(quote_seconds) if quote_seconds else None,
                    "none_kinds": {k: quote_kinds[k] for k in ("link_to_opened_page", "earlier_pages", "other")},
@@ -467,7 +467,7 @@ def format_table(rounds):
          else frac(r["lang_match"]["same"], r["lang_match"]["pages"]) + f" (+{r['lang_match']['query_lang_unknown']} unclear)"),
         ("sentences with a quote found", lambda r: "n/a" if not r["quotes"]["asked"]
          else frac(r["quotes"]["found"], r["quotes"]["asked"])
-         + f" (not found {r['quotes']['not_found']}, none {r['quotes']['none']}, unasked {r['quotes']['unasked']})"),
+         + f" (not found {r['quotes']['not_found']}, short {r['quotes'].get('short', 0)}, none {r['quotes']['none']}, unasked {r['quotes']['unasked']})"),
         ("  quote turn, answers by outcome", lambda r: "n/a" if not r["quotes"]["answers"]
          else ", ".join(f"{k} {v}" for k, v in sorted(r["quotes"]["answers"].items()))),
         ("  quote turn, seconds (median)", lambda r: "n/a" if r["quotes"]["seconds_median"] is None

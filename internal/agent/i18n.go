@@ -525,6 +525,13 @@ var stepMessages = map[string]map[string]string{
 		"fr": "Citations indiquées par le modèle et non retrouvées : %d.",
 		"es": "Citas indicadas por el modelo y no encontradas: %d.",
 	},
+	"loop_quotes_short": {
+		"it": "Frasi con una citazione di meno di %d parole, troppo corta per fare da prova e non cercata: %d.",
+		"en": "Sentences with a quote under %d words, too short to prove anything and not looked for: %d.",
+		"de": "Sätze mit einem Zitat unter %d Wörtern, zu kurz als Beleg und nicht gesucht: %d.",
+		"fr": "Phrases avec une citation de moins de %d mots, trop courte pour servir de preuve et non cherchée : %d.",
+		"es": "Frases con una cita de menos de %d palabras, demasiado corta para servir de prueba y no buscada: %d.",
+	},
 	"loop_quotes_unusable": {
 		"it": "Vedetta ha chiesto al modello da dove viene ogni frase, ma non ha avuto una risposta utilizzabile.",
 		"en": "Vedetta asked the model where each sentence comes from, but did not get a usable reply.",

@@ -132,7 +132,7 @@ func TestVerifyQuote(t *testing.T) {
 		}
 	})
 	t.Run("too short", func(t *testing.T) {
-		if r := verifyQuote(pages, "P1", "forged steel"); r.Found {
+		if r := verifyQuote(pages, "P1", "forged steel"); r.Found || !r.Short {
 			t.Errorf("%+v", r)
 		}
 	})
@@ -153,6 +153,36 @@ func TestVerifyQuote(t *testing.T) {
 			t.Errorf("%+v", r)
 		}
 	})
+}
+
+// TestSettleQuotes_Short: a quote under loopQuoteMinWords is not looked for, so it cannot be counted as
+// "not found" (real session of 25/11: nine sentences told "not found", every quote was on its page).
+func TestSettleQuotes_Short(t *testing.T) {
+	pages := testQuotePages()
+	long := "The unit was painted green and stands near seven pipes in the yard"
+	items, _ := settleQuotes(
+		[]string{"The vessel is of forged steel.", "A short quote and an invented one.", "A short quote and a real one.", "Invented, short."},
+		map[int][]parsedQuote{
+			1: {{Label: "P1", Quote: "forged steel"}, {Label: "P1", Quote: "310 tonnes"}},
+			2: {{Label: "P1", Quote: "forged steel"}, {Label: "P1", Quote: long}},
+			3: {{Label: "P1", Quote: "forged steel"}, {Label: "P1", Quote: "Operators check the coolant level every morning before the first shift"}},
+			4: {{Label: "P1", Quote: "bright purple"}},
+		}, pages)
+	// the last one: too short says nothing about being on the page or not
+	for i, want := range []string{quoteShort, quoteNotFound, quoteFound, quoteShort} {
+		if items[i].State != want {
+			t.Errorf("%d: state %s want %s (%+v)", i+1, items[i].State, want, items[i])
+		}
+	}
+	note := quotesNote("it", LoopStats{Quotes: "done", QuoteItems: items})
+	for _, want := range []string{"pagine lette: 1 di 4.", "non ritrovate: 1.", "meno di 5 parole, troppo corta per fare da prova e non cercata: 2."} {
+		if !strings.Contains(note, want) {
+			t.Errorf("missing %q in %q", want, note)
+		}
+	}
+	if note := quotesNote("en", LoopStats{Quotes: "done", QuoteItems: items[:1]}); strings.Contains(note, "not found") || !strings.Contains(note, "under 5 words") {
+		t.Errorf("only short quotes: %q", note)
+	}
 }
 
 func TestSettleQuotes(t *testing.T) {

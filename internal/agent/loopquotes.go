@@ -34,6 +34,7 @@ const (
 const (
 	quoteFound    = "found"     // a passage the model gave is on a page it read
 	quoteNotFound = "not_found" // the model gave a passage and Go finds it on no page
+	quoteShort    = "short"     // the model gave only passages under loopQuoteMinWords, which Go does not look for
 	quoteNone     = "none"      // the model says no page says it, or gave no readable line
 	quoteUnasked  = "unasked"   // over the cap
 )
@@ -59,12 +60,13 @@ type QuoteRef struct {
 	Score    float64 `json:"score,omitempty"`
 	Found    bool    `json:"found"`
 	Moved    bool    `json:"moved,omitempty"` // found on another page than the one named
+	Short    bool    `json:"short,omitempty"` // under loopQuoteMinWords: not looked for, so not "not found"
 }
 
 // QuoteItem is a sentence of the answer and where it comes from.
 type QuoteItem struct {
 	Sentence   string     `json:"sentence"`
-	State      string     `json:"state"` // found, not_found, none, unasked
+	State      string     `json:"state"` // found, not_found, short, none, unasked
 	Refs       []QuoteRef `json:"refs,omitempty"`
 	NumbersOut []string   `json:"numbers_out,omitempty"` // numbers of the sentence not in the passage found
 }
@@ -230,6 +232,7 @@ func verifyQuoteAt(pages []quotePage, label, quote string) (QuoteRef, int, []evi
 	}
 	toks := alignTokens(quote)
 	if len(toks) < loopQuoteMinWords {
+		ref.Short = true
 		return ref, -1, nil
 	}
 	probe := quote
@@ -288,7 +291,8 @@ func cutOnWord(s string, keep, max int) string {
 }
 
 // settleQuotes verifies the passages given for each sentence and fixes its state:
-// found if one is on a page, not_found if some were given and none is, none otherwise.
+// found if one is on a page, not_found if one long enough to be looked for is on none, short if
+// all of them are too short to prove anything, none if the model gave no passage.
 // lines counts the sentences with a readable line, "none" included.
 func settleQuotes(units []string, parsed map[int][]parsedQuote, pages []quotePage) (items []QuoteItem, lines int) {
 	for i, u := range units {
@@ -311,7 +315,12 @@ func settleQuotes(units []string, parsed map[int][]parsedQuote, pages []quotePag
 			item.NumbersOut = numbersOutOf(u, strings.Join(passages, "\n\n"))
 		}
 		if item.State != quoteFound && len(item.Refs) > 0 {
-			item.State = quoteNotFound
+			item.State = quoteShort
+			for _, r := range item.Refs {
+				if !r.Short {
+					item.State = quoteNotFound
+				}
+			}
 		}
 		items = append(items, item)
 	}
@@ -431,8 +440,8 @@ func (l *deepLoop) askQuotes(ctx context.Context, messages []llm.Message, answer
 	for _, it := range items {
 		count[it.State]++
 	}
-	log.Printf("[deeploop] session=%s quotes: %s found=%d not_found=%d none=%d unasked=%d lines=%d asked=%d reply_chars=%d seconds=%d",
-		l.params.SessionID, l.stats.Quotes, count[quoteFound], count[quoteNotFound], count[quoteNone], count[quoteUnasked],
+	log.Printf("[deeploop] session=%s quotes: %s found=%d not_found=%d short=%d none=%d unasked=%d lines=%d asked=%d reply_chars=%d seconds=%d",
+		l.params.SessionID, l.stats.Quotes, count[quoteFound], count[quoteNotFound], count[quoteShort], count[quoteNone], count[quoteUnasked],
 		lines, len(asked), reply.Len(), l.stats.QuoteSeconds)
 	if l.stats.Quotes == "format" {
 		// the only trace of a reply out of format: its beginning, on one line
@@ -448,7 +457,7 @@ func (l *deepLoop) askQuotes(ctx context.Context, messages []llm.Message, answer
 func quotesNote(lang string, s LoopStats) string {
 	switch s.Quotes {
 	case "done":
-		found, notFound, asked := 0, 0, 0
+		found, notFound, short, asked := 0, 0, 0, 0
 		for _, it := range s.QuoteItems {
 			if it.State == quoteUnasked {
 				continue
@@ -459,11 +468,16 @@ func quotesNote(lang string, s LoopStats) string {
 				found++
 			case quoteNotFound:
 				notFound++
+			case quoteShort:
+				short++
 			}
 		}
 		out := "\n\n*" + StepMessage(lang, "loop_quotes_found", found, asked) + "*"
 		if notFound > 0 {
 			out += "\n*" + StepMessage(lang, "loop_quotes_notfound", notFound) + "*"
+		}
+		if short > 0 {
+			out += "\n*" + StepMessage(lang, "loop_quotes_short", loopQuoteMinWords, short) + "*"
 		}
 		return out
 	case "format", "error":

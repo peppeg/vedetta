@@ -159,7 +159,7 @@ func runCase(conn *sql.DB, client *llm.Client, name, sid string, cache map[strin
 }
 
 func report(rs []caseResult, out string) {
-	var asked, lines, refs, refsFound, found, notFound, none, foundNums, foundClean, moved int
+	var asked, lines, refs, refsFound, found, notFound, short, none, foundNums, foundClean, moved int
 	var secs []float64
 	for _, r := range rs {
 		asked += r.Asked
@@ -179,6 +179,8 @@ func report(rs []caseResult, out string) {
 				}
 			case "not_found":
 				notFound++
+			case "short":
+				short++
 			case "none":
 				none++
 			}
@@ -201,7 +203,7 @@ func report(rs []caseResult, out string) {
 	fmt.Println("\n| Riga | Valore |\n|---|---|")
 	fmt.Printf("| 1. Formato: righe leggibili / frasi chieste | %s |\n", pct(lines, asked))
 	fmt.Printf("| 2. Passi veri: trovati / indicati | %s |\n", pct(refsFound, refs))
-	fmt.Printf("| 3. DECIDE: frasi found / chieste | %s (found %d, not_found %d, none %d) |\n", pct(found, asked), found, notFound, none)
+	fmt.Printf("| 3. DECIDE: frasi found / chieste | %s (found %d, not_found %d, short %d, none %d) |\n", pct(found, asked), found, notFound, short, none)
 	fmt.Printf("| 4. Numeri nel passo: found senza NumbersOut / found con numeri | %s |\n", pct(foundClean, foundNums))
 	fmt.Printf("| 5. Pagina sbagliata: Moved / passi trovati | %s |\n", pct(moved, refsFound))
 	fmt.Printf("| 6. Tempo: mediana / massimo (s) | %.0f / %.0f |\n", med, max)

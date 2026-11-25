@@ -46,6 +46,7 @@ QUOTE_ANSWER = (
 QUOTE_ITEMS = [
     {"sentence": "La seconda frase porta una fonte accanto a sé pagina.", "state": "found"},
     {"sentence": "Una frase con un passo che nessuna pagina ha, scritto dal modello.", "state": "not_found"},
+    {"sentence": "Una frase con un passo di due parole, che nessuno cerca nelle pagine.", "state": "short"},
     {"sentence": "Una frase che rimanda a una pagina aperta da Vedetta guida e basta.", "state": "none"},
     {"sentence": "Una deduzione del modello, senza nessun link vicino a lei.", "state": "none"},
     {"sentence": "Una frase che il testo della risposta non ha più, scritta altrove.", "state": "none"},
@@ -130,7 +131,7 @@ class FreeReportTest(unittest.TestCase):
         conn.commit()
         conn.close()
         q = self.round()["quotes"]
-        self.assertEqual((q["asked"], q["found"], q["not_found"], q["none"], q["unasked"]), (5, 1, 1, 3, 1))
+        self.assertEqual((q["asked"], q["found"], q["not_found"], q["short"], q["none"], q["unasked"]), (6, 1, 1, 1, 3, 1))
         self.assertEqual(q["answers"], {"done": 1})
         self.assertEqual(q["seconds_median"], 40)
         # the link is taken from the answer's text; the sentence the text no longer has goes with the others
