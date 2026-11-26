@@ -25,6 +25,7 @@ import (
 	"log"
 	"net/url"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"sync/atomic"
@@ -57,6 +58,8 @@ type ReviewItem struct {
 	Passage string   `json:"passage,omitempty"` // the passage of that page closest to the sentence
 	Lacks   []string `json:"lacks,omitempty"`   // preview details the page itself does not contain
 	Unread  bool     `json:"unread,omitempty"`  // the page could not be opened
+	// Names not found, with the words of what the model saw spelled almost like them.
+	Spellings map[string][]string `json:"spellings,omitempty"`
 }
 
 // previewOnly merges the two checks of the draft: everywhere holds the details
@@ -311,6 +314,136 @@ func reviewWords(s string) []string {
 	return out
 }
 
+// A name sent back may be a misspelling of one the model read: "Besidotech", where the
+// decree it read writes BESIDETECH (case 26, 26/11/2026). Told only that the name was
+// not found, the model kept it. On the saved answers most names with a word spelled
+// almost the same are translations (Brasile, Brazil) or other things, so this is not
+// said to the reader: the model is shown the word, and judges.
+const (
+	nearSpellingMinRunes = 4 // shorter words are one letter from too many others
+	nearSpellingShort    = 6 // up to this length one letter may differ, beyond it two
+	nearSpellingsMax     = 2 // words shown for a name
+)
+
+// nearSpellings returns, for the names that have any, the words of seen spelled almost
+// like them: the same first letter, and one letter apart (two for names longer than
+// nearSpellingShort), without case or accents. Only words written with a capital count:
+// a name is compared with names, not with "stack". The addresses in seen are left out.
+func nearSpellings(names []string, seen string) map[string][]string {
+	if len(names) == 0 {
+		return nil
+	}
+	written := map[string]string{} // key → the word as first written
+	byFirst := map[rune][]string{}
+	for _, line := range strings.Split(seen, "\n") {
+		if t := strings.TrimSpace(line); (strings.HasPrefix(t, "http://") || strings.HasPrefix(t, "https://")) && !strings.ContainsAny(t, " \t") {
+			continue
+		}
+		for _, w := range reviewWords(line) {
+			first, _ := utf8.DecodeRuneInString(w)
+			k := nameKey(w)
+			if !unicode.IsUpper(first) || utf8.RuneCountInString(k) < nearSpellingMinRunes {
+				continue
+			}
+			if _, ok := written[k]; !ok {
+				written[k] = w
+				r, _ := utf8.DecodeRuneInString(k)
+				byFirst[r] = append(byFirst[r], k)
+			}
+		}
+	}
+	out := map[string][]string{}
+	done := map[string]bool{}
+	for _, n := range names {
+		k := nameKey(n)
+		kr := []rune(k)
+		if done[n] || len(kr) < nearSpellingMinRunes {
+			continue
+		}
+		done[n] = true
+		limit := 1
+		if len(kr) > nearSpellingShort {
+			limit = 2
+		}
+		type near struct {
+			word string
+			d    int
+		}
+		var found []near
+		for _, c := range byFirst[kr[0]] {
+			if c == k {
+				continue
+			}
+			if d := editDistance(kr, []rune(c), limit); d <= limit {
+				found = append(found, near{written[c], d})
+			}
+		}
+		if len(found) == 0 {
+			continue
+		}
+		sort.Slice(found, func(i, j int) bool {
+			if found[i].d != found[j].d {
+				return found[i].d < found[j].d
+			}
+			return found[i].word < found[j].word
+		})
+		for i := 0; i < len(found) && i < nearSpellingsMax; i++ {
+			out[n] = append(out[n], found[i].word)
+		}
+	}
+	return out
+}
+
+// editDistance is the number of letters to add, remove or change to turn a into b,
+// or limit+1 as soon as it is clear that it is more than limit.
+func editDistance(a, b []rune, limit int) int {
+	if d := len(a) - len(b); d > limit || -d > limit {
+		return limit + 1
+	}
+	prev := make([]int, len(b)+1)
+	cur := make([]int, len(b)+1)
+	for j := range prev {
+		prev[j] = j
+	}
+	for i := 1; i <= len(a); i++ {
+		cur[0] = i
+		best := i
+		for j := 1; j <= len(b); j++ {
+			cost := 1
+			if a[i-1] == b[j-1] {
+				cost = 0
+			}
+			cur[j] = min(prev[j]+1, cur[j-1]+1, prev[j-1]+cost)
+			best = min(best, cur[j])
+		}
+		if best > limit {
+			return limit + 1
+		}
+		prev, cur = cur, prev
+	}
+	return prev[len(b)]
+}
+
+// withSpellings attaches to each item the near spellings of its names.
+func withSpellings(items []ReviewItem, seen string) []ReviewItem {
+	var names []string
+	for _, it := range items {
+		names = append(names, it.Names...)
+	}
+	near := nearSpellings(names, seen)
+	for i := range items {
+		for _, n := range items[i].Names {
+			if w := near[n]; len(w) > 0 {
+				if items[i].Spellings == nil {
+					items[i].Spellings = map[string][]string{}
+				}
+				items[i].Spellings[n] = w
+			}
+		}
+	}
+	return items
+}
+
 // isAcronymPlural: CVEs, APIs.
 func isAcronymPlural(w string) bool {
 	return len(w) > 2 && strings.HasSuffix(w, "s") && strings.ToUpper(w[:len(w)-1]) == w[:len(w)-1]
@@ -542,13 +675,25 @@ func reviewMessage(items []ReviewItem, links []LinkTrouble, lang string, researc
 	default:
 		b.WriteString("Vedetta compared your answer with the pages you read, the search results you saw and the question.\n")
 	}
+	spelled := false
 	for i, it := range missing {
 		if i == loopReviewMaxItems {
 			fmt.Fprintf(&b, "- and %d more sentences.\n", len(missing)-i)
 			break
 		}
-		details := append(append([]string{}, it.Numbers...), it.Names...)
+		details := append([]string{}, it.Numbers...)
+		for _, n := range it.Names {
+			if w := it.Spellings[n]; len(w) > 0 {
+				n += " (the sources write: " + strings.Join(w, ", ") + ")"
+				spelled = true
+			}
+			details = append(details, n)
+		}
 		fmt.Fprintf(&b, "- «%s»: %s\n", shortSentence(it.Sentence, 240), strings.Join(details, ", "))
+	}
+	if spelled {
+		b.WriteString("Next to some names is a word of the sources spelled almost the same. If your name is a misspelling of it, " +
+			"write it as the sources do. If it is a translation, or a different thing, that word changes nothing.\n")
 	}
 	if len(preview) > 0 {
 		b.WriteString("\nThese details appear only in the short previews of search results, not in a page you read. " +

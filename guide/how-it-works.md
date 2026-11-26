@@ -13,7 +13,7 @@ are over, the model writes with what it has and says what it could not verify.
 
 | Check | What Vedetta does |
 |---|---|
-| Numbers and names | looks for them in everything the model saw. The ones it cannot find go back to the model: verify or remove |
+| Numbers and names | looks for them in everything the model saw. The ones it cannot find go back to the model: verify or remove. A name a page writes almost the same goes back with the page's spelling |
 | Details seen only in a search preview | opens the page and sends the sentence back with the passage closest to it |
 | Cited pages the model did not read | opens them and has each compared with the sentence, apart from the conversation. A sentence that does not stand goes back to the model; if it still does not, it loses the link |
 | What the answer says it did | "I consulted the archives" is compared with the pages really opened |

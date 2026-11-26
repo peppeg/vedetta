@@ -1,5 +1,11 @@
 # Changelog
 
+## Not released yet
+
+- **Names sent back:** when a page the model read writes a name almost the same ("Besidotech",
+  where the decree read writes BESIDETECH), the model is shown that spelling with the name, so
+  it can correct a misspelling. Translations stay as they are.
+
 ## 0.4.3 (26 November 2026)
 
 - **Settings → Access:** "Remove" no longer empties "Current code" while you type it, so an

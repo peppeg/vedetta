@@ -1629,9 +1629,10 @@ func (l *deepLoop) review(draft, query string, history []storage.TurnMessage) []
 	// A site cited by name: its name is in the address.
 	addresses := l.sourceAndPageURLs(true)
 	names := append(append([]string{}, ev...), addresses...)
-	items := reviewDraft(draft, l.params.AnswerLanguage, l.numbersSeen(ev, addresses), strings.Join(names, "\n"))
+	seen := strings.Join(names, "\n")
+	items := reviewDraft(draft, l.params.AnswerLanguage, l.numbersSeen(ev, addresses), seen)
 	if !l.e.deepLoopPreviews {
-		return items
+		return withSpellings(items, seen)
 	}
 	// The same check on the pages read alone: what it adds was seen only in previews.
 	pages := append([]string{query}, todayTexts(time.Now())...)
@@ -1646,7 +1647,7 @@ func (l *deepLoop) review(draft, query string, history []storage.TurnMessage) []
 	}
 	pageNames := append(append([]string{}, pages...), addresses...)
 	items = previewOnly(items, reviewDraft(draft, l.params.AnswerLanguage, l.numbersSeen(pages, l.sourceAndPageURLs(false)), strings.Join(pageNames, "\n")))
-	return l.openPreviewPages(items)
+	return withSpellings(l.openPreviewPages(items), seen)
 }
 
 // openPreviewPages opens the result pages of the details the draft found only in
