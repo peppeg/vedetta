@@ -1,9 +1,9 @@
 # Installing Vedetta
 
 Vedetta comes in two packages. Both need Docker with Compose, or Podman (see
-[Podman](#podman): on every command below, `podman compose` instead of `docker
-compose`), on amd64 or arm64. They also need `git`; on a minimal system install it
-first (`sudo apt install git`, `sudo dnf install git`).
+[Podman](#podman): two lines to run once, and on every command below `podman compose`
+instead of `docker compose`), on amd64 or arm64. They also need `git`; on a minimal
+system install it first (`sudo apt install git`, `sudo dnf install git`).
 
 | | What runs | For whom |
 |---|---|---|
@@ -24,8 +24,8 @@ echo "SEARXNG_SECRET=$(openssl rand -hex 32)" >> .env
 docker compose up -d
 ```
 
-If it stops with a long error, don't panic. Read the **last line**: it says which value is
-missing in `.env`.
+If it stops with a long error, don't panic. Near the end, a line says `required variable
+… is missing a value`: it names the value to write in `.env`.
 
 The first start downloads about 1.8 GB, mostly Jina Reader. The whole package takes
 about 4 GB of disk and up to 1.5 GB of memory.
@@ -69,8 +69,10 @@ paid search and paste its key.
 
 The two packages use the same name and the same data volume: to change from one to
 the other, stop the first (`docker compose down`, without `-v`), then start the second.
-Searches and settings stay; check the addresses of the services in **Settings →
-Services**.
+Searches and settings stay. core does not include SearXNG and Jina Reader: the addresses
+essential used (`http://searxng:8080`, `http://jina:8081`) will not answer. In
+**Settings → Services**, write the addresses of your own services, or choose a paid
+search.
 
 ## Reaching Vedetta from other devices
 
@@ -96,7 +98,7 @@ example `VEDETTA_ALLOWED_HOSTS=vedetta.example.org`.
   answer, at every change of what is installed (`deploy/test/install.sh`, run by GitHub
   with a stand-in model).
 - **Podman** 6.1.3 without root, `podman-compose` 1.6.0, on Fedora 45: both packages by
-  hand, with a real model, reboot included.
+  hand, with a real model, reboot and logout from ssh included.
 - Not tried: Docker Desktop (Windows, macOS); on arm64 the image is built, not started.
 
 ## Updating
@@ -119,6 +121,12 @@ docker compose down -v
 away with the container. To remove the downloaded images too (3.7 GB):
 `docker compose down -v --rmi all`.
 
+Then delete the `vedetta` folder: its `.env` holds the options you set there and, with
+essential, the SearXNG secret. With Podman, if you ran the two lines in
+[Podman](#podman) only for Vedetta, undo them:
+`systemctl --user disable podman-restart.service` and
+`sudo loginctl disable-linger $USER`.
+
 ## Podman
 
 `podman compose up -d` works the same, as a normal user (no root). It needs a compose
@@ -126,12 +134,17 @@ provider: we tried `podman-compose` 1.6.0 with Podman 6.1.3 on Fedora 45
 (`sudo dnf install podman-compose`). The first line it prints, `>>>> Executing external
 compose provider`, is normal.
 
-**After a reboot** Vedetta does not start again by itself. Once:
+**Podman stops Vedetta when you log out**, about 10 seconds after your last session
+ends: on a machine you reach with ssh, as soon as you close it. After a reboot it does
+not start Vedetta again. Once, right after the first `podman compose up -d`:
 
 ```
 systemctl --user enable podman-restart.service
 sudo loginctl enable-linger $USER
 ```
+
+The first line starts Vedetta again after a reboot; the second keeps it running when
+you are not logged in.
 
 **Do not use `podman compose restart`:** with podman-compose it often leaves Vedetta
 as it was, without saying so. Use `podman compose down` and `podman compose up -d`, or
@@ -141,9 +154,10 @@ restart one service: `podman compose restart vedetta`.
 
 - The first run, and **Settings → Services**, say what is wrong with SearXNG or Jina:
   not reachable, not SearXNG, JSON off, limiter, no results.
-- `docker compose ps`: every service should be `healthy`.
-- `docker compose logs vedetta`: the first lines say where Vedetta looks for each
-  service and who can reach it.
+- From the folder of the package (`deploy/essential` or `deploy/core`):
+  - `docker compose ps`: every service should be `healthy`.
+  - `docker compose logs vedetta`: the first lines say where Vedetta looks for each
+    service and who can reach it.
 
 ## Good to know
 

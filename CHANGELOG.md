@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.3 (26 November 2026)
+
+- **Settings → Access:** "Remove" no longer empties "Current code" while you type it, so an
+  access code set from the page can be removed again.
+- **Installation guide:** with Podman, the two lines to run once also keep Vedetta running
+  after you log out (on a machine reached with ssh it stopped 10 seconds later). Clearer
+  words on a missing value in `.env`, on changing from essential to core, and on removing
+  everything.
+
 ## 0.4.2 (25 November 2026)
 
 The first public version. We have the answer; the question is up to you.

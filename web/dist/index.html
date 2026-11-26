@@ -2448,11 +2448,13 @@ $('#accessEdit').addEventListener('click', e => {
     if (v.length < 6) { accessMsg(t('code_short'), true); return }
     saveCode(kind, v);
   } else if (rm) {
+    // arm and disarm only the button: redrawing the box would empty "Current code" while it is being typed
     const kind = rm.dataset.codeRemove;
-    if (codeArmed !== kind) { codeArmed = kind; renderCodes(); setTimeout(() => { if (codeArmed === kind) { codeArmed = null; renderCodes() } }, 3000); return }
-    codeArmed = null; saveCode(kind, '');
+    if (codeArmed !== kind) { codeArmed = kind; armRemove(rm, true); setTimeout(() => { if (codeArmed === kind) { codeArmed = null; const b = $(`[data-code-remove="${kind}"]`); if (b) armRemove(b, false) } }, 3000); return }
+    codeArmed = null; armRemove(rm, false); saveCode(kind, '');
   }
 });
+function armRemove(btn, on) { btn.classList.toggle('armed', on); btn.querySelector('span').textContent = t(on ? 'code_remove_confirm' : 'code_remove') }
 $('#accessEdit').addEventListener('keydown', e => { const i = e.target.closest('[data-code-in]'); if (i && e.key === 'Enter') $(`[data-code-save="${i.dataset.codeIn}"]`).click() });
 async function checkAccess() {
   try { const r = await fetch('/api/auth'); if (r.ok) access = await r.json() } catch { }
