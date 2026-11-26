@@ -181,7 +181,7 @@ If one of these interests you, or one is missing, open an issue.
 ## The project
 
 Vedetta is a young project. It is made by one person, and the code is written with the help
-of an artificial intelligence.
+of an artificial intelligence: which tools, and for what, is in [AI.md](AI.md).
 
 So far it took about 200 hours of work in two months, almost two billion tokens to write and
 check the code, and more than 70 hours of a Strix Halo for the tests. The project is in
