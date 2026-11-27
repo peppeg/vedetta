@@ -17,8 +17,9 @@ type ProbeStatus struct {
 	Status string `json:"status"`
 	Detail string `json:"detail,omitempty"`
 	// Problem names what is wrong, as a code the page says in words (map R8):
-	// unreachable, not_searxng, json_off, limiter, no_results; limiter_on is a
-	// warning on a working SearXNG.
+	// unreachable, not_searxng, use_api (a SearXNG-style search such as degoog
+	// answers under /api: Detail is that address), json_off, limiter,
+	// no_results; limiter_on is a warning on a working SearXNG.
 	Problem string `json:"problem,omitempty"`
 	Version string `json:"version,omitempty"`
 }
@@ -87,6 +88,17 @@ func probeSearxng(ctx context.Context, rawURL string) ProbeStatus {
 		return down("limiter", "status 429")
 	}
 	if resp.StatusCode != http.StatusOK || json.Unmarshal(body, &info) != nil || info.Version == nil || len(info.Engines) == 0 {
+		// Not SearXNG. degoog, and any service that copies SearXNG's JSON
+		// search, has no /config but answers the empty JSON search with 400
+		// like a SearXNG with JSON on. degoog's search sits under /api, so a
+		// base address without it is pointed there.
+		switch {
+		case answersNoQuery(get, "/search?q=&format=json"):
+			st.Status, st.Detail = "ok", "answers like SearXNG, without /config (degoog or similar)"
+			return st
+		case answersNoQuery(get, "/api/search?q=&format=json"):
+			return down("use_api", base+"/api")
+		}
 		return down("not_searxng", fmt.Sprintf("status %d", resp.StatusCode))
 	}
 	st.Version = *info.Version
@@ -109,6 +121,22 @@ func probeSearxng(ctx context.Context, rawURL string) ProbeStatus {
 		st.Problem = "limiter_on"
 	}
 	return st
+}
+
+// answersNoQuery says whether path answers an empty query as a JSON search
+// does: status 400 with a JSON object. A web page answers with HTML, or with
+// 200 or 404.
+func answersNoQuery(get func(string) (*http.Response, error), path string) bool {
+	resp, err := get(path)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusBadRequest || !strings.Contains(resp.Header.Get("Content-Type"), "json") {
+		return false
+	}
+	var obj map[string]json.RawMessage
+	return json.NewDecoder(io.LimitReader(resp.Body, 64<<10)).Decode(&obj) == nil
 }
 
 // limiterOn reads /config's limiter: a bool in older SearXNG, an object with

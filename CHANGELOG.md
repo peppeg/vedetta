@@ -9,7 +9,8 @@
   box": Show / Hide), saved in the browser like the theme.
 - **degoog as the search service:** at degoog's SearXNG-style address (`…/api`), Vedetta now
   knows which engine found each result and names the engines that did not answer, as it does
-  with SearXNG.
+  with SearXNG. The service check and the first run show it as working, and say to add `/api`
+  when the address lacks it.
 
 ## 0.4.3 (26 November 2026)
 
