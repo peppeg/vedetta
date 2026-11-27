@@ -34,7 +34,7 @@ Each piece can be at home or in the cloud, and you can mix them:
 | | At home | In the cloud |
 |---|---|---|
 | **Model** | Ollama, LM Studio, llama.cpp, vLLM, Lemonade, Halogen, Gufo, DwarfStar | any OpenAI-compatible service |
-| **Search** | SearXNG | Brave, Tavily, Serper, Exa |
+| **Search** | SearXNG, degoog | Brave, Tavily, Serper, Exa |
 | **Reading pages** | built-in reader, Jina Reader, a browser you already have | Firecrawl, Exa |
 
 **Simple.** There is one box where you write the question. Services are switched on in the
@@ -45,8 +45,8 @@ first time it starts, Vedetta looks by itself for the ones you already have.
 
 There is no setup that is right for everyone. Some examples:
 
-- **Everything at home.** A model on Ollama, SearXNG and the built-in reader. No keys, no
-  bills.
+- **Everything at home.** A model on Ollama, SearXNG or degoog, and the built-in reader. No
+  keys, no bills.
 - **A mini PC with no graphics card.** Vedetta and SearXNG on the mini PC, the model in the
   cloud with your key.
 - **Everything in the cloud.** Brave to search, Firecrawl to read, a pay-per-use model. Only
@@ -173,8 +173,7 @@ No dates, and the order can change:
 - profiles, for several people with separate searches;
 - a documented API, so that other programs can use Vedetta (the base is already there);
 - exporting the answer to a document;
-- trying [degoog](https://github.com/degoog-org/degoog) for the search in place of SearXNG,
-  and a proper academic search.
+- a proper academic search.
 
 If one of these interests you, or one is missing, open an issue.
 
