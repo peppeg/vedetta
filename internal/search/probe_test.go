@@ -62,48 +62,6 @@ func TestProbeProvider_SearxngDoctor(t *testing.T) {
 	}
 }
 
-// degoog answers like a real degoog 1.x on 27/11/2026: no /config, its web page
-// at /search, the SearXNG-style JSON search under /api.
-func TestProbeProvider_DegoogAnswersLikeSearxng(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch r.URL.Path {
-		case "/api/config":
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte(`{"error":"Unauthorized","code":401}`))
-		case "/api/search":
-			w.Header().Set("Content-Type", "application/json")
-			if r.URL.Query().Get("q") == "" {
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write([]byte(`{"error":"Missing or invalid query parameter 'q'"}`))
-				return
-			}
-			w.Write([]byte(`{"results":[{"url":"https://a.example","source":"Bing"}],"engineTimings":[]}`))
-		case "/search", "/":
-			w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-			w.Write([]byte("<!doctype html><html>degoog</html>"))
-		default:
-			w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte("<!doctype html><html>not found</html>"))
-		}
-	}))
-	defer srv.Close()
-
-	got := ProbeProvider(context.Background(), "searxng", ProviderConfig{SearxngURL: srv.URL + "/api/"})
-	if got.Status != "ok" || got.Problem != "" || got.Detail == "" || got.Name != "searxng" {
-		t.Errorf("degoog at /api: got %+v", got)
-	}
-	if n, err := ProbeSearxngResults(context.Background(), srv.URL+"/api"); err != nil || n != 1 {
-		t.Errorf("degoog test search: got %d results, err %v", n, err)
-	}
-
-	got = ProbeProvider(context.Background(), "searxng", ProviderConfig{SearxngURL: srv.URL})
-	if got.Status != "down" || got.Problem != "use_api" || got.Detail != srv.URL+"/api" {
-		t.Errorf("degoog without /api: got %+v", got)
-	}
-}
-
 func TestProbeSearxngResults(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Query().Get("q") == "" || r.URL.Query().Get("format") != "json" {

@@ -148,6 +148,7 @@ func (h *Handlers) Capabilities(w http.ResponseWriter, r *http.Request) {
 	readerProviders := append([]string(nil), h.cfg.ReaderProviders...)
 	searchCfg := search.ProviderConfig{
 		SearxngURL:   h.cfg.SearxngURL,
+		DegoogURL:    h.cfg.DegoogURL,
 		BraveAPIKey:  h.cfg.BraveAPIKey,
 		TavilyAPIKey: h.cfg.TavilyAPIKey,
 		SerperAPIKey: h.cfg.SerperAPIKey,
@@ -430,7 +431,7 @@ func (h *Handlers) Search(w http.ResponseWriter, r *http.Request) {
 		var searchErr, readerErr error
 		var readerCfg reader.ReaderConfig
 		var endpoints []config.LLMEndpoint
-		var searxngURL, braveKey, tavilyKey, serperKey, exaKey, exaType, exaLocation string
+		var searxngURL, degoogURL, braveKey, tavilyKey, serperKey, exaKey, exaType, exaLocation string
 		var fallbackOnEmpty bool
 		retryPolicy := llm.DefaultRetryPolicy()
 		maxTokens := 0
@@ -457,6 +458,7 @@ func (h *Handlers) Search(w http.ResponseWriter, r *http.Request) {
 			}
 			endpoints = append(endpoints, h.cfg.LLMEndpoints...)
 			searxngURL = h.cfg.SearxngURL
+			degoogURL = h.cfg.DegoogURL
 			braveKey = h.cfg.BraveAPIKey
 			tavilyKey = h.cfg.TavilyAPIKey
 			serperKey = h.cfg.SerperAPIKey
@@ -488,6 +490,7 @@ func (h *Handlers) Search(w http.ResponseWriter, r *http.Request) {
 				Providers:       searchChain,
 				FallbackOnEmpty: fallbackOnEmpty,
 				SearxngURL:      searxngURL,
+				DegoogURL:       degoogURL,
 				BraveAPIKey:     braveKey,
 				TavilyAPIKey:    tavilyKey,
 				SerperAPIKey:    serperKey,
@@ -609,6 +612,7 @@ type ConfigResponse struct {
 	BrowserCDPAddress     string            `json:"browser_cdp_address"` // scheme://host only: the address may carry a token
 	HasLLMKey             bool              `json:"has_llm_key"`
 	SearxngURL            string            `json:"searxng_url"`
+	DegoogURL             string            `json:"degoog_url"`
 	JinaURL               string            `json:"jina_url"`
 	LLMBaseURL            string            `json:"llm_base_url"`
 	LLMModel              string            `json:"llm_model"`
@@ -643,6 +647,7 @@ type ConfigUpdateRequest struct {
 	ExaAPIKey             *string             `json:"exa_api_key,omitempty"`
 	BrowserCDPURL         *string             `json:"browser_cdp_url,omitempty"`
 	SearxngURL            *string             `json:"searxng_url,omitempty"`
+	DegoogURL             *string             `json:"degoog_url,omitempty"`
 	JinaURL               *string             `json:"jina_url,omitempty"`
 	LLMBaseURL            *string             `json:"llm_base_url,omitempty"`
 	LLMModel              *string             `json:"llm_model,omitempty"`
@@ -752,6 +757,9 @@ func applyConfigUpdate(cfg *config.Config, req *ConfigUpdateRequest) error {
 	}
 	if req.SearxngURL != nil && strings.TrimSpace(*req.SearxngURL) != "" {
 		cfg.SearxngURL = strings.TrimSpace(*req.SearxngURL)
+	}
+	if req.DegoogURL != nil && strings.TrimSpace(*req.DegoogURL) != "" {
+		cfg.DegoogURL = strings.TrimSpace(*req.DegoogURL)
 	}
 	if req.JinaURL != nil && strings.TrimSpace(*req.JinaURL) != "" {
 		cfg.JinaURL = strings.TrimSpace(*req.JinaURL)
@@ -1040,6 +1048,7 @@ func (h *Handlers) writeConfigResponse(w http.ResponseWriter) {
 		BrowserCDPAddress:     reader.RedactBrowserURL(cfg.BrowserCDPURL),
 		HasLLMKey:             cfg.LLMAPIKey != "",
 		SearxngURL:            cfg.SearxngURL,
+		DegoogURL:             cfg.DegoogURL,
 		JinaURL:               cfg.JinaURL,
 		LLMBaseURL:            cfg.LLMBaseURL,
 		LLMModel:              cfg.LLMModel,
@@ -1155,6 +1164,7 @@ func (h *Handlers) Config(w http.ResponseWriter, r *http.Request) {
 			Providers:       candidate.SearchProviders,
 			FallbackOnEmpty: candidate.SearchFallbackOnEmpty,
 			SearxngURL:      candidate.SearxngURL,
+			DegoogURL:       candidate.DegoogURL,
 			BraveAPIKey:     candidate.BraveAPIKey,
 			TavilyAPIKey:    candidate.TavilyAPIKey,
 			SerperAPIKey:    candidate.SerperAPIKey,

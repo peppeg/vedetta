@@ -83,6 +83,7 @@ func main() {
 		Providers:       cfg.SearchProviders,
 		FallbackOnEmpty: cfg.SearchFallbackOnEmpty,
 		SearxngURL:      cfg.SearxngURL,
+		DegoogURL:       cfg.DegoogURL,
 		BraveAPIKey:     cfg.BraveAPIKey,
 		TavilyAPIKey:    cfg.TavilyAPIKey,
 		SerperAPIKey:    cfg.SerperAPIKey,

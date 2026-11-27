@@ -27,6 +27,7 @@ key if needed and the name; *Browse* lists the models the service offers.
 | Service | Needs |
 |---|---|
 | SearXNG | its address; JSON on, limiter off (see the [install guide](../deploy/README.md)) |
+| [degoog](https://github.com/degoog-org/degoog) | its address (`DEGOOG_URL`, port 4444 by default); "Search API key enforcement" off in its settings |
 | Brave, Tavily, Serper, Exa | a key; they are paid, so they start switched off |
 
 Chosen in the top bar, switched on in **Settings → Services**. If the chosen one does

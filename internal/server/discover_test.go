@@ -26,6 +26,24 @@ func fakeSearxngWith(searchCode int, results string) *httptest.Server {
 	}))
 }
 
+// fakeDegoogFound answers like degoog: its JSON search under /api, 400 with no query.
+func fakeDegoogFound() *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/search" {
+			w.Header().Set("Content-Type", "text/html")
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if r.URL.Query().Get("q") == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(`{"error":"Missing or invalid query parameter 'q'"}`))
+			return
+		}
+		w.Write([]byte(`{"results":[{"url":"https://a.example","snippet":"a","source":"Bing"},{"url":"https://b.example","snippet":"b","source":"Startpage"}],"engineTimings":[]}`))
+	}))
+}
+
 func fakeJina() *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("[Usage 1] https://r.jina.ai/YOUR_URL\n"))
@@ -58,11 +76,16 @@ func TestDiscover(t *testing.T) {
 	defer page.Close()
 	jina := fakeJina()
 	defer jina.Close()
+	dg := fakeDegoogFound()
+	defer dg.Close()
 	dead := deadURL()
 
-	oldS, oldJ, oldT := searxngCandidates, jinaCandidates, discoverProbeTime
-	defer func() { searxngCandidates, jinaCandidates, discoverProbeTime = oldS, oldJ, oldT }()
+	oldS, oldD, oldJ, oldT := searxngCandidates, degoogCandidates, jinaCandidates, discoverProbeTime
+	defer func() {
+		searxngCandidates, degoogCandidates, jinaCandidates, discoverProbeTime = oldS, oldD, oldJ, oldT
+	}()
 	searxngCandidates = []string{dead, jsonOff.URL, page.URL, good.URL + "/", blocked.URL}
+	degoogCandidates = []string{dead, page.URL, dg.URL}
 	jinaCandidates = []string{page.URL, jina.URL, dead}
 	discoverProbeTime = 2 * time.Second
 
@@ -89,14 +112,17 @@ func TestDiscover(t *testing.T) {
 	for _, f := range got.Search {
 		byURL[f.URL] = f
 	}
-	if len(got.Search) != 5 {
-		t.Errorf("search: want good, blocked, json off, typed, current; got %+v", got.Search)
+	if len(got.Search) != 6 {
+		t.Errorf("search: want good, blocked, degoog, json off, typed, current; got %+v", got.Search)
 	}
-	if f := got.Search[0]; f.URL != good.URL || f.Status != "ok" || f.Results == nil || *f.Results != 2 || f.Problem != "" || f.Version != "2026.11.18" {
+	if f := got.Search[0]; f.URL != good.URL || f.Provider != "searxng" || f.Status != "ok" || f.Results == nil || *f.Results != 2 || f.Problem != "" || f.Version != "2026.11.18" {
 		t.Errorf("first should be the working SearXNG: %+v", f)
 	}
 	if f := byURL[blocked.URL]; f.Status != "ok" || f.Problem != "no_results" {
 		t.Errorf("SearXNG with no results: %+v", f)
+	}
+	if f := byURL[dg.URL]; f.Provider != "degoog" || f.Status != "ok" || f.Results == nil || *f.Results != 2 || f.Problem != "" {
+		t.Errorf("degoog at a usual address: %+v", f)
 	}
 	if f := byURL[jsonOff.URL]; f.Status != "down" || f.Problem != "json_off" {
 		t.Errorf("SearXNG with JSON off: %+v", f)
@@ -119,11 +145,38 @@ func TestDiscover(t *testing.T) {
 	}
 }
 
+// An address typed for the search can be a degoog, pasted with /api or not: it
+// comes back as degoog, at its base address, and the current degoog is shown.
+func TestDiscover_TypedDegoog(t *testing.T) {
+	dg := fakeDegoogFound()
+	defer dg.Close()
+	oldS, oldD, oldJ := searxngCandidates, degoogCandidates, jinaCandidates
+	defer func() { searxngCandidates, degoogCandidates, jinaCandidates = oldS, oldD, oldJ }()
+	searxngCandidates, degoogCandidates, jinaCandidates = nil, nil, nil
+
+	h := guardedServer(t, func(c *config.Config) {
+		c.Bind = "127.0.0.1"
+		c.SearxngURL = "http://127.0.0.1:1"
+		c.DegoogURL = dg.URL + "/api"
+	})
+	rec := call(h, "GET", "/api/setup/discover?searxng="+url.QueryEscape(dg.URL+"/api/"), "", nil)
+	var got DiscoverResponse
+	if err := json.Unmarshal(rec.Body.Bytes(), &got); err != nil {
+		t.Fatal(err)
+	}
+	if len(got.Search) != 2 {
+		t.Fatalf("want the degoog (typed and current) and the current SearXNG; got %+v", got.Search)
+	}
+	if f := got.Search[0]; f.URL != dg.URL || f.Provider != "degoog" || f.Status != "ok" || !f.Typed || !f.Current || f.Results == nil || *f.Results != 2 {
+		t.Errorf("typed degoog: %+v", f)
+	}
+}
+
 // The search for services is a settings matter: with a settings code, not without.
 func TestDiscover_NeedsSettingsCode(t *testing.T) {
-	oldS, oldJ := searxngCandidates, jinaCandidates
-	defer func() { searxngCandidates, jinaCandidates = oldS, oldJ }()
-	searxngCandidates, jinaCandidates = nil, nil
+	oldS, oldD, oldJ := searxngCandidates, degoogCandidates, jinaCandidates
+	defer func() { searxngCandidates, degoogCandidates, jinaCandidates = oldS, oldD, oldJ }()
+	searxngCandidates, degoogCandidates, jinaCandidates = nil, nil, nil
 	h := guardedServer(t, func(c *config.Config) { c.Bind = "127.0.0.1"; c.ConfigToken = "impostazioni-segrete" })
 	if rec := call(h, "GET", "/api/setup/discover", "", nil); rec.Code != http.StatusUnauthorized {
 		t.Errorf("without the settings code: %d, want 401", rec.Code)
@@ -143,6 +196,30 @@ func TestNormalizeServiceURL(t *testing.T) {
 	} {
 		if got := normalizeServiceURL(in); got != want {
 			t.Errorf("normalizeServiceURL(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+func TestDropLoopbackTwin(t *testing.T) {
+	in := []FoundService{
+		{URL: "http://127.0.0.1:4444", Status: "ok"},
+		{URL: "http://localhost:4444", Status: "ok"},
+		{URL: "http://localhost:5555", Status: "ok"},
+		{URL: "http://localhost:6666", Status: "ok", Current: true},
+		{URL: "http://127.0.0.1:6666", Status: "ok"},
+	}
+	got := dropLoopbackTwin(in)
+	var urls []string
+	for _, f := range got {
+		urls = append(urls, f.URL)
+	}
+	want := []string{"http://127.0.0.1:4444", "http://localhost:5555", "http://localhost:6666", "http://127.0.0.1:6666"}
+	if len(urls) != len(want) {
+		t.Fatalf("got %v, want %v", urls, want)
+	}
+	for i := range want {
+		if urls[i] != want[i] {
+			t.Fatalf("got %v, want %v", urls, want)
 		}
 	}
 }

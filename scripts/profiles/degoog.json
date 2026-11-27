@@ -1,4 +1,6 @@
 {
-  "_comment": "The home config with degoog as the search service, at its SearXNG-style address (/api). 127.0.0.1, not localhost: localhost resolves to ::1 and degoog's container does not answer there. Run with bench.py --live (degoog searches live; there is no degoog corpus).",
-  "searxng_url": "http://127.0.0.1:4444/api"
+  "_comment": "The home config with degoog as the search service (its own provider since 27/11). 127.0.0.1, not localhost: localhost resolves to ::1 and degoog's container does not answer there. Run with bench.py --live (degoog searches live; there is no degoog corpus).",
+  "default_search_provider": "degoog",
+  "search_providers": ["degoog"],
+  "degoog_url": "http://127.0.0.1:4444"
 }

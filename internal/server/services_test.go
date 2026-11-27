@@ -81,6 +81,25 @@ func TestRequestChain(t *testing.T) {
 	}
 }
 
+// degoog is free, so on, but it has no usual address: without one it cannot be
+// chosen and stays out of the chains; with one it is a free fallback like SearXNG.
+func TestRequestChain_Degoog(t *testing.T) {
+	cfg := homeCfg()
+	if _, err := requestChain(cfg, "search", "degoog"); err == nil || !strings.Contains(err.Error(), "no address") {
+		t.Fatalf("degoog without address: got %v", err)
+	}
+	if got := defaultChain(cfg, "search", "searxng", nil); !reflect.DeepEqual(got, []string{"searxng"}) {
+		t.Fatalf("degoog without address in the default chain: got %v", got)
+	}
+	cfg.DegoogURL = "http://127.0.0.1:4444"
+	if got, err := requestChain(cfg, "search", "degoog"); err != nil || !reflect.DeepEqual(got, []string{"degoog", "searxng"}) {
+		t.Fatalf("search degoog: got %v, %v", got, err)
+	}
+	if got := defaultChain(cfg, "search", "degoog", nil); !reflect.DeepEqual(got, []string{"degoog", "searxng"}) {
+		t.Fatalf("degoog as the default: got %v", got)
+	}
+}
+
 func TestRequestChain_NoPaidFallbackUnlessAllowed(t *testing.T) {
 	cfg := homeCfg()
 	cfg.ReaderProviders = []string{"http", "exa", "jina"} // e.g. an old file with a paid reader in the chain

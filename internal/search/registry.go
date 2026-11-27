@@ -13,6 +13,7 @@ type ProviderConfig struct {
 	Providers        []string // Ordered list of providers (REV 2)
 	FallbackOnEmpty  bool     // Advance chain on 0 results if true
 	SearxngURL       string
+	DegoogURL        string
 	BraveAPIKey      string
 	TavilyAPIKey     string
 	SerperAPIKey     string
@@ -36,6 +37,13 @@ func init() {
 			url = "http://localhost:8888"
 		}
 		return NewSearxngProvider(url), nil
+	})
+
+	Register("degoog", func(cfg ProviderConfig) (Provider, error) {
+		if DegoogBase(cfg.DegoogURL) == "" {
+			return nil, fmt.Errorf("degoog search requires DEGOOG_URL")
+		}
+		return NewDegoogProvider(cfg.DegoogURL), nil
 	})
 
 	Register("brave", func(cfg ProviderConfig) (Provider, error) {

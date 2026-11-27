@@ -88,6 +88,9 @@ func (s *Server) Start() error {
 		log.Printf("   Reachable from other devices, with an access code")
 	}
 	log.Printf("   SearXNG: %s", s.cfg.SearxngURL)
+	if s.cfg.DegoogURL != "" {
+		log.Printf("   degoog:  %s", s.cfg.DegoogURL)
+	}
 	log.Printf("   Jina:    %s", s.cfg.JinaURL)
 	log.Printf("   LLM:     %s (Model: %s)", s.cfg.LLMBaseURL, s.cfg.LLMModel)
 

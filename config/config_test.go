@@ -153,6 +153,26 @@ func TestSaveLoadLocalConfig_BrowserCDPURL(t *testing.T) {
 	}
 }
 
+func TestSaveLoadLocalConfig_DegoogURL(t *testing.T) {
+	path := t.TempDir() + "/config.local"
+	if err := SaveLocalConfig(path, &Config{DegoogURL: "http://127.0.0.1:4444"}); err != nil {
+		t.Fatalf("SaveLocalConfig failed: %v", err)
+	}
+	got := &Config{DegoogURL: "from .env"}
+	loadLocalConfig(path, got)
+	if got.DegoogURL != "http://127.0.0.1:4444" {
+		t.Errorf("DegoogURL = %q", got.DegoogURL)
+	}
+	if err := SaveLocalConfig(path, &Config{}); err != nil {
+		t.Fatal(err)
+	}
+	got = &Config{DegoogURL: "from .env"}
+	loadLocalConfig(path, got)
+	if got.DegoogURL != "from .env" {
+		t.Errorf("no address in the file: the .env one holds, got %q", got.DegoogURL)
+	}
+}
+
 // Map R3: the two experimental levers are saved only once chosen in Settings, and
 // then they win over .env; not chosen, the .env value holds.
 func TestLocalConfig_ExperimentalLevers(t *testing.T) {

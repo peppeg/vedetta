@@ -925,8 +925,8 @@ const T = {
     paid_note: n => `La prossima ricerca usa ${n}: servizio a pagamento.`, sel_reset: 'La scelta precedente non è più disponibile: uso il predefinito.', turn_on_hint: 'I servizi grigi si accendono nelle Impostazioni.',
     // first run (map R8)
     su_title: 'Prima accensione', su_lead: 'Quattro passi per partire. Vedetta ha già cercato da sola i servizi più comuni: controlla e completa. Poi tutto si cambia nelle impostazioni.',
-    su_search: '1 · Ricerca', su_search_desc: 'Dove Vedetta cerca sul web: un SearXNG (gratis, sulla tua macchina o in casa) oppure una ricerca a pagamento.',
-    su_looking: 'Cerco SearXNG e Jina Reader sugli indirizzi più comuni…', su_none_searxng: 'Nessun SearXNG sugli indirizzi più comuni. Scrivi il suo indirizzo qui sotto, oppure usa una ricerca a pagamento.',
+    su_search: '1 · Ricerca', su_search_desc: 'Dove Vedetta cerca sul web: un SearXNG o un degoog (gratis, sulla tua macchina o in casa) oppure una ricerca a pagamento.',
+    su_looking: 'Cerco SearXNG, degoog e Jina Reader sugli indirizzi più comuni…', su_none_searxng: 'Nessun SearXNG o degoog sugli indirizzi più comuni. Scrivi il suo indirizzo qui sotto, oppure usa una ricerca a pagamento.',
     su_other_addr: 'un altro indirizzo, es. http://192.168.1.10:8888', su_try: 'Prova', su_paid_search: 'Una ricerca a pagamento, con la tua chiave',
     su_container: 'Vedetta gira in un container: lì «localhost» è il container stesso. Un servizio su questa macchina si raggiunge con host.docker.internal, per esempio http://host.docker.internal:8888.',
     su_works: 'funziona', su_results: n => `${n} risultati alla ricerca di prova`, su_version: v => `versione ${v}`,
@@ -945,11 +945,14 @@ const T = {
     su_redo: 'Rifai la prima accensione', su_redo_desc: 'Ricerca, lettura, modello e codice in una pagina sola, con Vedetta che cerca da sola i servizi più comuni.',
     doc_unreachable: 'non risponde a questo indirizzo', doc_down: 'non risponde come dovrebbe',
     doc_not_searxng: 'a questo indirizzo risponde qualcosa, ma non è SearXNG',
-    doc_use_api: 'qui risponde una ricerca come SearXNG (per esempio degoog), ma sotto /api: aggiungi /api alla fine dell’indirizzo',
+    doc_is_degoog: 'qui risponde degoog, non SearXNG: in Vedetta degoog ha la sua riga, «degoog». Scrivi lì questo indirizzo',
+    doc_not_degoog: 'a questo indirizzo risponde qualcosa, ma non è degoog',
+    doc_degoog_key: 'è degoog, ma chiede una chiave per le ricerche (API key), e Vedetta per ora non la manda: nelle impostazioni di degoog spegni «Obbligo chiave API per ricerca»',
+    doc_degoog_limit: 'è degoog, ma il suo limite di richieste blocca Vedetta: nelle impostazioni di degoog alza i limiti o spegni «Limitazione richieste di ricerca»',
     doc_json_off: 'è SearXNG, ma il formato JSON è spento: nel suo settings.yml servono le righe «search:», sotto «formats:», e sotto ancora «- html» e «- json»; poi riavvialo',
     doc_limiter: 'è SearXNG, ma il suo limitatore blocca Vedetta: nel suo settings.yml metti server → limiter: false, poi riavvialo',
     doc_limiter_on: 'il limitatore di SearXNG è acceso: con molte ricerche insieme può bloccare Vedetta',
-    doc_no_results: 'risponde, ma la ricerca di prova non ha dato risultati: forse i suoi motori sono bloccati. Guarda le impostazioni di SearXNG, oppure usa una ricerca a pagamento.',
+    doc_no_results: 'risponde, ma la ricerca di prova non ha dato risultati: forse i suoi motori sono bloccati. Guarda le sue impostazioni, oppure usa una ricerca a pagamento.',
     doc_not_jina: 'a questo indirizzo risponde qualcosa, ma non è Jina Reader',
     tags: ['Cosa vuoi <em>scoprire</em> oggi?', 'Fai una domanda. <em>Segui</em> le tracce.', 'Ogni risposta porta con sé le sue <em>fonti</em>.', 'Esplora, leggi, <em>verifica</em>.', 'Il web è grande. Cominciamo da una <em>domanda</em>.'],
   },
@@ -1031,8 +1034,8 @@ const T = {
     paid_note: n => `The next search uses ${n}: a paid service.`, sel_reset: 'The previous choice is no longer available: using the default.', turn_on_hint: 'Grey services are switched on in Settings.',
     // first run (map R8)
     su_title: 'First run', su_lead: 'Four steps to start. Vedetta has already looked for the most common services by itself: check and complete. Everything can be changed later in Settings.',
-    su_search: '1 · Search', su_search_desc: 'Where Vedetta searches the web: a SearXNG (free, on your machine or at home) or a paid search.',
-    su_looking: 'Looking for SearXNG and Jina Reader at the most common addresses…', su_none_searxng: 'No SearXNG at the most common addresses. Write its address below, or use a paid search.',
+    su_search: '1 · Search', su_search_desc: 'Where Vedetta searches the web: a SearXNG or a degoog (free, on your machine or at home) or a paid search.',
+    su_looking: 'Looking for SearXNG, degoog and Jina Reader at the most common addresses…', su_none_searxng: 'No SearXNG or degoog at the most common addresses. Write its address below, or use a paid search.',
     su_other_addr: 'another address, e.g. http://192.168.1.10:8888', su_try: 'Try', su_paid_search: 'A paid search, with your key',
     su_container: 'Vedetta runs in a container: there "localhost" is the container itself. A service on this machine is at host.docker.internal, for example http://host.docker.internal:8888.',
     su_works: 'works', su_results: n => `${n} results to the test search`, su_version: v => `version ${v}`,
@@ -1051,11 +1054,14 @@ const T = {
     su_redo: 'Run the first run again', su_redo_desc: 'Search, reading, model and code on one page, with Vedetta looking for the most common services by itself.',
     doc_unreachable: 'does not answer at this address', doc_down: 'does not answer as it should',
     doc_not_searxng: 'something answers at this address, but it is not SearXNG',
-    doc_use_api: 'a SearXNG-style search answers here (degoog, for example), but under /api: add /api to the end of the address',
+    doc_is_degoog: 'degoog answers here, not SearXNG: in Vedetta degoog has its own row, "degoog". Write this address there',
+    doc_not_degoog: 'something answers at this address, but it is not degoog',
+    doc_degoog_key: 'it is degoog, but it wants a key for searches (API key), and Vedetta does not send one yet: in the degoog settings, turn off "Search API key enforcement"',
+    doc_degoog_limit: 'it is degoog, but its request limit blocks Vedetta: in the degoog settings, raise the limits or turn off "Search rate limiting"',
     doc_json_off: 'it is SearXNG, but its JSON format is off: its settings.yml needs the lines "search:", under it "formats:", and under that "- html" and "- json"; then restart it',
     doc_limiter: 'it is SearXNG, but its limiter blocks Vedetta: in its settings.yml set server → limiter: false, then restart it',
     doc_limiter_on: 'the SearXNG limiter is on: with many searches at once it can block Vedetta',
-    doc_no_results: 'it answers, but the test search gave no results: its engines may be blocked. Check the SearXNG settings, or use a paid search.',
+    doc_no_results: 'it answers, but the test search gave no results: its engines may be blocked. Check its settings, or use a paid search.',
     doc_not_jina: 'something answers at this address, but it is not Jina Reader',
     tags: ['What do you want to <em>discover</em> today?', 'Ask a question. <em>Follow</em> the trail.', 'Every answer carries its <em>sources</em>.', 'Explore, read, <em>verify</em>.', 'The web is big. Let’s start with a <em>question</em>.'],
   },
@@ -1316,7 +1322,7 @@ function makeDraft() {
     services: {}, paidFallback: !!svc.paid_fallback,
     defSearch: defaultOf('search')?.id || 'searxng',
     readerOrder: [...new Set([...(config.reader_providers || []).map(normReader), ...svcList('reader').map(x => x.id)])],
-    urls: { searxng: config.searxng_url || '', jina: config.jina_url || '', browser: '' },
+    urls: { searxng: config.searxng_url || '', degoog: config.degoog_url || '', jina: config.jina_url || '', browser: '' },
     keys: {}, editKey: {},
     llm: svcList('llm').map(e => ({ id: e.id, name: e.name || e.id, base_url: e.base_url, model: e.model, paid: !!e.paid, has_key: !!e.has_key, key_env: e.key_env || '', key: '', clear: false, editKey: false, status: e.status, models: e.models || [] })),
     defLLM: defaultOf('llm')?.id || '',
@@ -1328,7 +1334,7 @@ const setDirty = () => { dirty = true; $('#saveBar').classList.remove('hidden');
 function svcState(x) {
   const k = draft.keys[x.id];
   if (x.needs === 'key' && !x.has_key && !k) return ['', t('st_nokey')];
-  if (x.id === 'browser' && !x.url && !draft.urls.browser) return ['', t('st_nourl')];
+  if (x.needs === 'url' && !x.url && !draft.urls[x.id]) return ['', t('st_nourl')];
   if (x.status === 'ok') return ['good', t('responds')];
   if (x.status === 'down') return ['bad', t('down')];
   if (x.status === 'configured' || k) return ['', t('st_key')];
@@ -1564,6 +1570,7 @@ $('#saveBtn').onclick = async () => {
     default_llm_endpoint: draft.defLLM,
   };
   if (draft.urls.searxng && draft.urls.searxng !== config.searxng_url) body.searxng_url = draft.urls.searxng;
+  if (draft.urls.degoog && draft.urls.degoog !== config.degoog_url) body.degoog_url = draft.urls.degoog;
   if (draft.urls.jina && draft.urls.jina !== config.jina_url) body.jina_url = draft.urls.jina;
   if (draft.urls.browser) body.browser_cdp_url = draft.urls.browser;
   Object.entries(draft.keys).forEach(([id, v]) => { if (v && KEY_FIELD[id]) body[KEY_FIELD[id]] = v });
@@ -2518,7 +2525,7 @@ async function suDiscover() {
   if (!su) return;
   su.disc = d || { search: [], reader: [] }; su.busy = false;
   const okS = su.disc.search.filter(f => f.status === 'ok');
-  if (su.pick !== 'key' && !okS.some(f => f.url === su.pick)) su.pick = (okS.find(f => f.typed) || okS.find(f => !f.problem) || okS[0])?.url || '';
+  if (su.pick !== 'key' && !okS.some(f => f.url === su.pick)) su.pick = (okS.find(f => f.typed) || okS.find(f => f.current && !f.problem && f.provider === (config?.default_search_provider || 'searxng')) || okS.find(f => !f.problem) || okS[0])?.url || '';
   const okJ = su.disc.reader.filter(f => f.status === 'ok');
   const typedJ = okJ.find(f => f.typed);
   if (typedJ) { su.jinaUrl = typedJ.url; su.jinaOn = true }
@@ -2558,7 +2565,7 @@ function renderSetup() {
   // 1. search
   let h = '';
   if (su.busy) h += `<div class="su-note">${esc(t('su_looking'))}</div>`;
-  (d?.search || []).forEach(f => { h += suFound(f, 'SearXNG', `<input type="radio" name="suS" value="${esc(f.url)}" ${su.pick === f.url ? 'checked' : ''} ${f.status === 'ok' ? '' : 'disabled'}>`) });
+  (d?.search || []).forEach(f => { h += suFound(f, f.provider === 'degoog' ? 'degoog' : 'SearXNG', `<input type="radio" name="suS" value="${esc(f.url)}" ${su.pick === f.url ? 'checked' : ''} ${f.status === 'ok' ? '' : 'disabled'}>`) });
   if (d && !su.busy && !d.search.length) h += `<div class="su-note">${esc(t('su_none_searxng'))}</div>`;
   h += `<div class="addm"><input id="suTypedS" autocomplete="off" placeholder="${esc(t('su_other_addr'))}" value="${esc(su.typed.searxng)}"><button class="btn" data-su="tryS" ${su.busy ? 'disabled' : ''}><span>${esc(t('su_try'))}</span></button></div>`;
   h += `<label class="found"><input type="radio" name="suS" value="key" ${su.pick === 'key' ? 'checked' : ''}><div class="f-main"><div class="f-url">${esc(t('su_paid_search'))}</div>
@@ -2661,6 +2668,9 @@ $('#suDone').onclick = async () => {
   if (su.pick === 'key') {
     services['search:' + su.keyProv] = true; body.default_search_provider = su.keyProv;
     if (su.key) body[KEY_FIELD[su.keyProv]] = su.key;
+  } else if ((su.disc?.search || []).find(f => f.url === su.pick)?.provider === 'degoog') {
+    services['search:degoog'] = true; body.default_search_provider = 'degoog';
+    if (su.pick !== config.degoog_url) body.degoog_url = su.pick;
   } else {
     services['search:searxng'] = true; body.default_search_provider = 'searxng';
     if (su.pick !== config.searxng_url) body.searxng_url = su.pick;

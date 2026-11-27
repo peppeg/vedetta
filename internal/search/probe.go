@@ -17,9 +17,10 @@ type ProbeStatus struct {
 	Status string `json:"status"`
 	Detail string `json:"detail,omitempty"`
 	// Problem names what is wrong, as a code the page says in words (map R8):
-	// unreachable, not_searxng, use_api (a SearXNG-style search such as degoog
-	// answers under /api: Detail is that address), json_off, limiter,
-	// no_results; limiter_on is a warning on a working SearXNG.
+	// unreachable, not_searxng, is_degoog (degoog answers at a SearXNG address:
+	// Detail is its address, for the degoog service), json_off, limiter,
+	// no_results; limiter_on is a warning on a working SearXNG. degoog's own:
+	// not_degoog, degoog_key (it wants an API key), degoog_limit (its rate limit).
 	Problem string `json:"problem,omitempty"`
 	Version string `json:"version,omitempty"`
 }
@@ -33,6 +34,8 @@ func ProbeProvider(ctx context.Context, name string, cfg ProviderConfig) ProbeSt
 	switch clean {
 	case "searxng":
 		return probeSearxng(ctx, cfg.SearxngURL)
+	case "degoog":
+		return probeDegoog(ctx, cfg.DegoogURL)
 	case "brave":
 		return probeKeyed("brave", cfg.BraveAPIKey)
 	case "tavily":
@@ -88,16 +91,17 @@ func probeSearxng(ctx context.Context, rawURL string) ProbeStatus {
 		return down("limiter", "status 429")
 	}
 	if resp.StatusCode != http.StatusOK || json.Unmarshal(body, &info) != nil || info.Version == nil || len(info.Engines) == 0 {
-		// Not SearXNG. degoog, and any service that copies SearXNG's JSON
-		// search, has no /config but answers the empty JSON search with 400
-		// like a SearXNG with JSON on. degoog's search sits under /api, so a
-		// base address without it is pointed there.
+		// Not SearXNG. A service that copies SearXNG's JSON search has no
+		// /config but answers the empty JSON search with 400, like a SearXNG
+		// with JSON on. degoog's search sits under /api: it has its own
+		// service in Vedetta, and Detail is the address to give it.
 		switch {
+		case strings.HasSuffix(base, "/api") && answersNoQuery(get, "/search?q=&format=json"),
+			answersNoQuery(get, "/api/search?q=&format=json"):
+			return down("is_degoog", DegoogBase(base))
 		case answersNoQuery(get, "/search?q=&format=json"):
-			st.Status, st.Detail = "ok", "answers like SearXNG, without /config (degoog or similar)"
+			st.Status, st.Detail = "ok", "answers like SearXNG, without /config"
 			return st
-		case answersNoQuery(get, "/api/search?q=&format=json"):
-			return down("use_api", base+"/api")
 		}
 		return down("not_searxng", fmt.Sprintf("status %d", resp.StatusCode))
 	}

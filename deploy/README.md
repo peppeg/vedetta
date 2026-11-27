@@ -42,8 +42,8 @@ cp .env.example .env
 docker compose up -d
 ```
 
-Then open **http://localhost:3030**. The first run looks for SearXNG and Jina Reader
-at the usual addresses. If it does not find them, write their addresses, or choose a
+Then open **http://localhost:3030**. The first run looks for SearXNG, degoog and Jina
+Reader at the usual addresses. If it does not find them, write their addresses, or choose a
 paid search and paste its key.
 
 - **Inside a container, "localhost" is the container itself.** A service on the same

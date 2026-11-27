@@ -30,6 +30,7 @@ type ServiceDef struct {
 
 var serviceCatalog = []ServiceDef{
 	{ID: "searxng", Kind: "search", Name: "SearXNG", Needs: "url"},
+	{ID: "degoog", Kind: "search", Name: "degoog", Needs: "url"},
 	{ID: "brave", Kind: "search", Name: "Brave Search", Online: true, Paid: true, Needs: "key"},
 	{ID: "tavily", Kind: "search", Name: "Tavily", Online: true, Paid: true, Needs: "key"},
 	{ID: "serper", Kind: "search", Name: "Serper (Google)", Online: true, Paid: true, Needs: "key"},
@@ -131,6 +132,11 @@ func serviceReady(cfg *config.Config, d ServiceDef) (bool, string) {
 		key = cfg.FirecrawlAPIKey
 	case "browser":
 		if strings.TrimSpace(cfg.BrowserCDPURL) == "" {
+			return false, "missing_url"
+		}
+		return true, ""
+	case "degoog":
+		if search.DegoogBase(cfg.DegoogURL) == "" {
 			return false, "missing_url"
 		}
 		return true, ""
@@ -455,7 +461,7 @@ func publicServices(in *ServicesResponse) *ServicesResponse {
 
 func buildServices(ctx context.Context, cfg *config.Config) ServicesResponse {
 	searchCfg := search.ProviderConfig{
-		SearxngURL: cfg.SearxngURL, BraveAPIKey: cfg.BraveAPIKey, TavilyAPIKey: cfg.TavilyAPIKey,
+		SearxngURL: cfg.SearxngURL, DegoogURL: cfg.DegoogURL, BraveAPIKey: cfg.BraveAPIKey, TavilyAPIKey: cfg.TavilyAPIKey,
 		SerperAPIKey: cfg.SerperAPIKey, ExaAPIKey: cfg.ExaAPIKey,
 	}
 	readerCfg := reader.ReaderConfig{
@@ -476,6 +482,8 @@ func buildServices(ctx context.Context, cfg *config.Config) ServicesResponse {
 		switch d.ID {
 		case "searxng":
 			v.URL = cfg.SearxngURL
+		case "degoog":
+			v.URL = cfg.DegoogURL
 		case "jina":
 			v.URL = cfg.JinaURL
 		case "browser":

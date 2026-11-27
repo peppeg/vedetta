@@ -118,6 +118,7 @@ type Config struct {
 	TavilyAPIKey           string
 	SerperAPIKey           string
 	SearxngURL             string
+	DegoogURL              string // degoog's address, "" = none (it has no usual address to try)
 	JinaURL                string
 	FirecrawlAPIKey        string
 	FirecrawlBaseURL       string
@@ -250,6 +251,7 @@ func Load() *Config {
 		TavilyAPIKey:           getEnv("TAVILY_API_KEY", ""),
 		SerperAPIKey:           getEnv("SERP_API_KEY", ""),
 		SearxngURL:             getEnv("SEARXNG_API_URL", "http://localhost:8888"),
+		DegoogURL:              getEnv("DEGOOG_URL", ""),
 		JinaURL:                getEnv("JINA_READER_URL", "http://localhost:3001"),
 		FirecrawlAPIKey:        getEnv("FIRECRAWL_API_KEY", ""),
 		FirecrawlBaseURL:       getEnv("FIRECRAWL_BASE_URL", "https://api.firecrawl.dev/v1"),
@@ -572,6 +574,7 @@ type LocalConfigFile struct {
 	ExaUserLocation       string          `json:"exa_user_location,omitempty"`
 	BrowserCDPURL         string          `json:"browser_cdp_url,omitempty"`
 	SearxngURL            string          `json:"searxng_url,omitempty"`
+	DegoogURL             string          `json:"degoog_url,omitempty"`
 	JinaURL               string          `json:"jina_url,omitempty"`
 	LLMEndpoints          []LLMEndpoint   `json:"llm_endpoints,omitempty"`
 	LLMDefaultID          string          `json:"llm_default_id,omitempty"`
@@ -629,6 +632,7 @@ func SaveLocalConfig(path string, cfg *Config) error {
 		ExaUserLocation:       cfg.ExaUserLocation,
 		BrowserCDPURL:         cfg.BrowserCDPURL,
 		SearxngURL:            cfg.SearxngURL,
+		DegoogURL:             cfg.DegoogURL,
 		JinaURL:               cfg.JinaURL,
 		LLMEndpoints:          endpoints,
 		LLMDefaultID:          cfg.LLMDefaultID,
@@ -750,6 +754,9 @@ func loadLocalConfig(path string, cfg *Config) error {
 	}
 	if f.SearxngURL != "" {
 		cfg.SearxngURL = f.SearxngURL
+	}
+	if f.DegoogURL != "" {
+		cfg.DegoogURL = f.DegoogURL
 	}
 	if f.JinaURL != "" {
 		cfg.JinaURL = f.JinaURL

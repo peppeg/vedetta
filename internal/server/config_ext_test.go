@@ -564,3 +564,47 @@ func TestConfig_LLMEndpointsKeepContextTokens(t *testing.T) {
 		t.Fatalf("endpoints = %+v, want main kept at 32768 and other set to 65536", got)
 	}
 }
+
+// degoog from Settings: its address is saved, it can then be the default
+// search, and the file keeps the address.
+func TestConfig_DegoogFromSettings(t *testing.T) {
+	path := t.TempDir() + "/config.local"
+	cfg := &config.Config{
+		SearchProviders:       []string{"searxng"},
+		DefaultSearchProvider: "searxng",
+		ReaderProviders:       []string{"http"},
+		SearxngURL:            "http://localhost:8888",
+		LLMBaseURL:            "http://localhost:8000/v1",
+		LLMModel:              "m",
+		ConfigPath:            path,
+	}
+	config.Normalize(cfg)
+	h := newExtendedConfigHandlers(t, cfg)
+
+	rec := postConfigUpdate(t, h, map[string]interface{}{"default_search_provider": "degoog", "services": map[string]bool{"search:degoog": true}})
+	if rec.Code == http.StatusOK && cfg.DefaultSearchProvider == "degoog" {
+		t.Fatalf("degoog without an address must not become the default: %s", rec.Body.String())
+	}
+
+	rec = postConfigUpdate(t, h, map[string]interface{}{
+		"degoog_url": " http://127.0.0.1:4444 ", "default_search_provider": "degoog",
+		"services": map[string]bool{"search:degoog": true},
+	})
+	if rec.Code != http.StatusOK {
+		t.Fatalf("save: %d %s", rec.Code, rec.Body.String())
+	}
+	if cfg.DegoogURL != "http://127.0.0.1:4444" || cfg.DefaultSearchProvider != "degoog" || len(cfg.SearchProviders) == 0 || cfg.SearchProviders[0] != "degoog" {
+		t.Fatalf("after save: url %q default %q chain %v", cfg.DegoogURL, cfg.DefaultSearchProvider, cfg.SearchProviders)
+	}
+	raw, err := os.ReadFile(path)
+	if err != nil || !strings.Contains(string(raw), `"degoog_url": "http://127.0.0.1:4444"`) {
+		t.Errorf("config.local: %s (%v)", raw, err)
+	}
+
+	get := httptest.NewRecorder()
+	h.Config(get, httptest.NewRequest(http.MethodGet, "/api/config", nil))
+	var resp ConfigResponse
+	if err := json.NewDecoder(get.Body).Decode(&resp); err != nil || resp.DegoogURL != "http://127.0.0.1:4444" {
+		t.Errorf("GET degoog_url = %q (%v)", resp.DegoogURL, err)
+	}
+}

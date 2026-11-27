@@ -7,10 +7,10 @@
   it can correct a misspelling. Translations stay as they are.
 - **Settings → Appearance:** the phrase above the search box can be hidden ("Phrase above the
   box": Show / Hide), saved in the browser like the theme.
-- **degoog as the search service:** at degoog's SearXNG-style address (`…/api`), Vedetta now
-  knows which engine found each result and names the engines that did not answer, as it does
-  with SearXNG. The service check and the first run show it as working, and say to add `/api`
-  when the address lacks it.
+- **degoog as a search service**, next to SearXNG: its own row in Settings → Services
+  (`DEGOOG_URL` in `.env`), found by the first run at the usual addresses. Vedetta tells it the
+  language of each search, knows which engine found each result and names the engines that
+  did not answer. Given a degoog address, the SearXNG row says to move it to the degoog one.
 
 ## 0.4.3 (26 November 2026)
 
