@@ -5,6 +5,8 @@
 - **Names sent back:** when a page the model read writes a name almost the same ("Besidotech",
   where the decree read writes BESIDETECH), the model is shown that spelling with the name, so
   it can correct a misspelling. Translations stay as they are.
+- **Settings → Appearance:** the phrase above the search box can be hidden ("Phrase above the
+  box": Show / Hide), saved in the browser like the theme.
 
 ## 0.4.3 (26 November 2026)
 

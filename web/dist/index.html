@@ -13,6 +13,7 @@
   if (t === 'auto') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   document.documentElement.dataset.theme = t;
   document.documentElement.dataset.palette = g('vedetta_accent') || 'ambra';
+  document.documentElement.dataset.tag = g('vedetta_tag') === 'off' ? 'off' : 'on';
 })();
 </script>
 <style>
@@ -162,6 +163,7 @@ button.dd-i:hover{background:var(--surface-2)}
 .tag{font:400 clamp(28px,4.2vw,44px)/1.15 var(--serif);letter-spacing:-.015em;text-align:center;margin:0 0 30px;min-height:1.2em;transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .tag.out{opacity:0;transform:translateY(6px)}
 .tag em{font-style:italic;color:var(--accent)}
+[data-tag="off"] .tag{display:none}
 .home-alert{margin-top:18px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
 
 .box{width:min(720px,100%);background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:16px 14px 10px 20px;transition:border-color .2s,box-shadow .2s}
@@ -677,6 +679,9 @@ a.chip:hover{border-color:var(--line-2);color:var(--text)}
             <button class="swatch" data-v="terracotta"><span style="background:#e08a63"></span><b data-t="c_terracotta" style="font-weight:400"></b></button>
             <button class="swatch" data-v="iris"><span style="background:#ac9ff2"></span><b data-t="c_iris" style="font-weight:400"></b></button>
           </div></div>
+          <div class="row"><div class="k" data-t="tag_row"></div><div class="pills" id="tagPills">
+            <button data-v="on" data-t="tag_on"></button><button data-v="off" data-t="tag_off"></button>
+          </div></div>
         </div>
         <div class="card">
           <h2 data-t="language"></h2>
@@ -873,7 +878,7 @@ const T = {
     reopen_partial: 'Risposta parziale: la ricerca si è fermata prima della fine.', reopen_fallback: 'Il servizio di ricerca scelto ha avuto problemi: alcune ricerche sono passate a quello di riserva.',
     on_server: 'Sul tuo server', online: 'Online', all_ok: 'Tutto attivo', some_down: 'Qualcosa non risponde', responds: 'risponde', down: 'non risponde', unknown: 'sconosciuto',
     s_search: 'Ricerca', s_reader: 'Lettura pagine', s_llm: 'Modello', down_alert: 'Alcuni servizi non rispondono: le risposte potrebbero essere incomplete.',
-    look: 'Aspetto', look_desc: 'Tema e colore d’accento, salvati in questo browser.', theme: 'Tema', theme_dark: 'Scuro', theme_light: 'Chiaro', theme_auto: 'Automatico', accent: 'Colore d’accento',
+    look: 'Aspetto', look_desc: 'Tema, colore d’accento e frase sopra il campo, salvati in questo browser.', tag_row: 'Frase sopra il campo', tag_on: 'Mostra', tag_off: 'Nascondi', theme: 'Tema', theme_dark: 'Scuro', theme_light: 'Chiaro', theme_auto: 'Automatico', accent: 'Colore d’accento',
     c_ambra: 'Ambra', c_salvia: 'Salvia', c_terracotta: 'Terracotta', c_iris: 'Iris',
     language: 'Lingua', language_desc: 'La lingua delle risposte segue quella della domanda.', ui_language: 'Lingua dell’interfaccia', lang_auto: 'Automatica',
     about: 'Informazioni', version: 'Versione', license: 'Licenza', project: 'Progetto',
@@ -978,7 +983,7 @@ const T = {
     reopen_partial: 'Partial answer: the research stopped before the end.', reopen_fallback: 'The chosen search service had problems: some searches went to the backup one.',
     on_server: 'On your server', online: 'Online', all_ok: 'All running', some_down: 'Something is not responding', responds: 'responds', down: 'not responding', unknown: 'unknown',
     s_search: 'Search', s_reader: 'Page reading', s_llm: 'Model', down_alert: 'Some services are not responding: answers may be incomplete.',
-    look: 'Appearance', look_desc: 'Theme and accent colour, saved in this browser.', theme: 'Theme', theme_dark: 'Dark', theme_light: 'Light', theme_auto: 'Automatic', accent: 'Accent colour',
+    look: 'Appearance', look_desc: 'Theme, accent colour and phrase above the box, saved in this browser.', tag_row: 'Phrase above the box', tag_on: 'Show', tag_off: 'Hide', theme: 'Theme', theme_dark: 'Dark', theme_light: 'Light', theme_auto: 'Automatic', accent: 'Accent colour',
     c_ambra: 'Amber', c_salvia: 'Sage', c_terracotta: 'Terracotta', c_iris: 'Iris',
     language: 'Language', language_desc: 'Answers follow the language of the question.', ui_language: 'Interface language', lang_auto: 'Automatic',
     about: 'About', version: 'Version', license: 'Licence', project: 'Project',
@@ -1078,6 +1083,8 @@ themeMQ.addEventListener('change', applyTheme);
 const applyAccent = v => { root.dataset.palette = v; store.set('vedetta_accent', v); $$('#swatches .swatch').forEach(b => b.classList.toggle('on', b.dataset.v === v)) };
 $('#themePills').onclick = e => { const b = e.target.closest('button'); if (!b) return; themePref = b.dataset.v; store.set('vedetta_theme', themePref); applyTheme() };
 $('#swatches').onclick = e => { const b = e.target.closest('.swatch'); if (b) applyAccent(b.dataset.v) };
+const applyTag = v => { root.dataset.tag = v; $$('#tagPills button').forEach(b => b.classList.toggle('on', b.dataset.v === v)) };
+$('#tagPills').onclick = e => { const b = e.target.closest('button'); if (!b) return; store.set('vedetta_tag', b.dataset.v); applyTag(b.dataset.v) };
 $('#langPills').onclick = e => { const b = e.target.closest('button'); if (!b) return; langPref = b.dataset.v; store.set('vedetta_lang', langPref); lang = resolveLang(langPref); applyLang() };
 
 /* ---------- views and sidebar ---------- */
@@ -1595,7 +1602,7 @@ $('#fgo').onclick = () => { if (busy) stopSearch(); else submitFrom('#fq', '#fgo
 /* ---------- rotating phrase ---------- */
 let tagIdx = 0;
 setInterval(() => {
-  if (!app.classList.contains('v-home') || document.hidden) return;
+  if (!app.classList.contains('v-home') || document.hidden || root.dataset.tag === 'off') return;
   const el = $('#tag'); el.classList.add('out');
   setTimeout(() => { const tags = t('tags'); tagIdx = (tagIdx + 1) % tags.length; el.innerHTML = tags[tagIdx]; el.classList.remove('out') }, 500);
 }, 6500);
@@ -2696,7 +2703,7 @@ $('#suRedo').onclick = async () => {
 };
 
 /* ---------- start ---------- */
-applyTheme(); applyAccent(root.dataset.palette || 'ambra'); applyLang(); syncGo();
+applyTheme(); applyAccent(root.dataset.palette || 'ambra'); applyTag(root.dataset.tag); applyLang(); syncGo();
 const startId = new URLSearchParams(location.search).get('session');
 checkAccess().then(ok => {
   if (!ok) return;
