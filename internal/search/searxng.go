@@ -15,17 +15,28 @@ type SearxngProvider struct {
 	httpClient *http.Client
 }
 
+// searxngResponse is SearXNG's JSON answer. degoog answers in the same shape at
+// its /api/search address, with two differences read here too: the engine of a
+// result is in "source", and how each engine did is in "engineTimings".
 type searxngResponse struct {
 	Results []struct {
 		URL     string  `json:"url"`
 		Title   string  `json:"title"`
 		Content string  `json:"content"`
 		Engine  string  `json:"engine"`
+		Source  string  `json:"source"`
 		Score   float64 `json:"score"`
 	} `json:"results"`
 	// UnresponsiveEngines lists [engine, reason] pairs for engines that did not
 	// answer this search (CAPTCHA, quota, timeout, parsing error).
 	UnresponsiveEngines [][]string `json:"unresponsive_engines"`
+	// EngineTimings (degoog) has one entry per engine queried; any status but
+	// "ok" means the engine did not answer ("rate_limited", "blocked",
+	// "interstitial"). An "ok" engine with no results did answer.
+	EngineTimings []struct {
+		Name   string `json:"name"`
+		Status string `json:"status"`
+	} `json:"engineTimings"`
 }
 
 func NewSearxngProvider(baseURL string) *SearxngProvider {
@@ -96,6 +107,13 @@ func (s *SearxngProvider) Search(ctx context.Context, query string, opts Options
 			}
 			rep.AddUnresponsive(pair[0], reason)
 		}
+		for _, e := range data.EngineTimings {
+			status := strings.TrimSpace(e.Status)
+			if status == "" || strings.EqualFold(status, "ok") {
+				continue
+			}
+			rep.AddUnresponsive(e.Name, strings.ReplaceAll(status, "_", " "))
+		}
 	}
 
 	maxRes := opts.MaxResults
@@ -113,11 +131,15 @@ func (s *SearxngProvider) Search(ctx context.Context, query string, opts Options
 		}
 		seen[cleanURL] = true
 
+		engine := strings.TrimSpace(item.Engine)
+		if engine == "" {
+			engine = strings.TrimSpace(item.Source) // degoog
+		}
 		results = append(results, Result{
 			Title:   strings.TrimSpace(item.Title),
 			URL:     cleanURL,
 			Content: strings.TrimSpace(item.Content),
-			Engine:  item.Engine,
+			Engine:  engine,
 			Score:   item.Score,
 		})
 

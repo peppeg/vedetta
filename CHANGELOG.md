@@ -7,6 +7,9 @@
   it can correct a misspelling. Translations stay as they are.
 - **Settings → Appearance:** the phrase above the search box can be hidden ("Phrase above the
   box": Show / Hide), saved in the browser like the theme.
+- **degoog as the search service:** at degoog's SearXNG-style address (`…/api`), Vedetta now
+  knows which engine found each result and names the engines that did not answer, as it does
+  with SearXNG.
 
 ## 0.4.3 (26 November 2026)
 
